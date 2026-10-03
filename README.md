@@ -13,12 +13,17 @@ It has 133 sections, six investigators and nine endings.
 
 ## Play
 
+Online: **https://lukaszdygon.github.io/call-of-cthulhu-solo/** (deployed from `main` by `.github/workflows/deploy-pages.yml`).
+
+Locally:
+
 ```bash
 uv sync
 uv run python -m http.server 8000 -d site     # then open http://127.0.0.1:8000/
 ```
 
 The site is static (`site/`), so any static host works. It needs js-yaml from cdnjs and three Google Fonts.
+Every push to `main` re-checks the adventures and republishes `site/` to GitHub Pages.
 
 ## Repo map
 

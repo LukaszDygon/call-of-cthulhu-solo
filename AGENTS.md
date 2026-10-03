@@ -8,6 +8,9 @@ Solo gamebooks in the style of the Call of Cthulhu RPG. A static, YAML-driven pl
 toolkit (`gamebook/`) checks adventures and simulates playthroughs. Stories are the product: their continuity
 matters as much as the code.
 
+Every push to `main` deploys `site/` to GitHub Pages (https://lukaszdygon.github.io/call-of-cthulhu-solo/). The
+deploy refuses to publish if `gamebook check --strict` fails, so keep it green.
+
 ## Commands
 
 ```bash
