@@ -13,6 +13,7 @@ from gamebook import adventure as A
 from gamebook.assemble import AssembleError, assemble, draft_parts
 from gamebook.checks import check
 from gamebook.simulate import simulate, target_failures, word_profile
+from gamebook.variety import KINDS, analyse
 
 DEFAULT_INDEX = Path("site/adventures/index.yaml")
 
@@ -134,6 +135,42 @@ def cmd_edges(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_choices(args: argparse.Namespace) -> int:
+    """Which decisions change something, and which are cosmetic."""
+    adv = A.load(args.file)
+    secs = A.sections(adv)
+    report = analyse(adv)
+
+    def name(sid: str | None) -> str:
+        return f"{sid} {secs[sid].get('title')!r}" if sid else "-"
+
+    counts = ", ".join(f"{report.count(k)} {k}" for k in KINDS)
+    print(
+        f"{adv.get('title')}: {len(report.decisions)} decisions: {counts} ({report.cosmetic_share:.0%} cosmetic)"
+    )
+    print(f"  every playthrough passes through: {', '.join(name(s) for s in report.bottlenecks) or '-'}")
+    cosmetic = [d for d in report.decisions if d.kind == "cosmetic"]
+    if cosmetic:
+        print("  cosmetic decisions (whatever the reader picks, the same scenes and state follow):")
+        for d in cosmetic:
+            print(f"    {name(d.section)} -> rejoins at {name(d.pairs[0].rejoin)}")
+            for c in dict.fromkeys(t for p in d.pairs for t in (p.a, p.b)):
+                print(f"        {c!r}")
+    twins = [(d, p) for d in report.decisions if d.kind != "cosmetic" for p in d.twins]
+    if twins:
+        print("  twin options inside other decisions (these two change nothing between them):")
+        for d, p in twins:
+            print(f"    {name(d.section)}: {p.a!r} / {p.b!r} -> rejoin at {name(p.rejoin)}")
+    if args.all:
+        print("  every decision:")
+        for d in report.decisions:
+            print(f"    {d.kind:8} {name(d.section)}")
+    failures = [line for line in target_failures(adv, None) if "cosmetic" in line]
+    for line in failures:
+        print(f"  TARGET MISSED: {line}")
+    return 1 if failures else 0
+
+
 def cmd_assemble(args: argparse.Namespace) -> int:
     parts = [p for path in args.parts for p in draft_parts(Path(path))]
     try:
@@ -170,6 +207,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("file")
     p.add_argument("--section", nargs="*", help="only these section numbers (default: all, busiest first)")
     p.set_defaults(func=cmd_edges)
+
+    p = sub.add_parser("choices", help="which decisions change something, and which are cosmetic")
+    p.add_argument("file")
+    p.add_argument("--all", action="store_true", help="list every decision with its kind")
+    p.set_defaults(func=cmd_choices)
 
     p = sub.add_parser("assemble", help="number a draft written with named sections")
     p.add_argument("parts", nargs="+", help="a drafts/<slug>/ directory, or part files in order")

@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from gamebook.adventure import CHARACTERISTICS, Adventure, rolled_skills, sections, word_count
+from gamebook.variety import analyse
 
 STEP_LIMIT = 300
 
@@ -195,13 +196,22 @@ def word_profile(adv: Adventure, short: int = 60, long: int = 250) -> dict[str, 
     }
 
 
-def target_failures(adv: Adventure, stats: Stats) -> list[str]:
-    """Compare against the adventure's optional `targets:` block (see docs/adventure-format.md)."""
+def target_failures(adv: Adventure, stats: Stats | None) -> list[str]:
+    """Compare against the adventure's optional `targets:` block (see docs/adventure-format.md).
+    Without `stats`, only the structural targets are checked."""
     t = adv.get("targets") or {}
     out = []
     n = len(sections(adv))
     if "sections" in t and not t["sections"][0] <= n <= t["sections"][1]:
         out.append(f"{n} sections, target {t['sections'][0]}-{t['sections'][1]}")
+    if "cosmetic_choices" in t:
+        report = analyse(adv)
+        if report.cosmetic_share > t["cosmetic_choices"]:
+            out.append(
+                f"{report.cosmetic_share:.0%} of {len(report.decisions)} decisions are cosmetic, target at most {t['cosmetic_choices']:.0%} (run `gamebook choices`)"
+            )
+    if stats is None:
+        return out
     if "path_mean" in t and not t["path_mean"][0] <= stats.path_mean <= t["path_mean"][1]:
         out.append(
             f"average playthrough {stats.path_mean:.1f} sections, target {t['path_mean'][0]}-{t['path_mean'][1]}"

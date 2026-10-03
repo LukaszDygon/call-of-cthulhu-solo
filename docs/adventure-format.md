@@ -26,13 +26,21 @@ Keep this document, the engine and `gamebook/simulate.py` in step: they describe
 
 ```yaml
 targets:
-  sections: [120, 140]        # total section count
+  sections: [150, 175]        # total section count
   path_mean: [20, 30]         # average sections per simulated playthrough
   companion_break: [0.1, 0.5] # share of runs in which a companion breaks
-  endings_reached: 8          # distinct endings reached in simulation
+  endings_reached: 15         # distinct endings reached in simulation
+  cosmetic_choices: 0.1       # most decisions allowed to change nothing (see `gamebook choices`)
 ```
 
-`uv run gamebook stats` and `tests/test_adventures.py` fail when a target is missed.
+`uv run gamebook stats` and `tests/test_adventures.py` fail when a target is missed. `uv run gamebook choices`
+checks `cosmetic_choices` on its own. It lists every decision (two or more choices that can be open together) as:
+- **fork:** the options can end the story differently
+- **detour:** one option walks 3+ sections of its own before rejoining
+- **flavour:** the options rejoin quickly but leave different checked state
+- **cosmetic:** the options rejoin with the same scenes and the same state
+
+It also lists the sections every playthrough passes through.
 
 ### Investigators
 
