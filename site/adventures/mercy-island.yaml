@@ -13,7 +13,8 @@
 #   requires      a choice (or an extra paragraph) only shows when this holds. A list means all of them.
 #   extra         paragraphs shown after the text when their `requires` holds (`before: true` puts one ahead of the text).
 #                   item, no_item, note, no_note, with (companion present and sane), broken, gone, skill + min, any: [...]
-#   ending        marks an ending section: triumph | escape | bittersweet | choir | lost | madness | death.
+#   ending        marks an ending section: triumph | escape | bittersweet | choir | lost | madness | death |
+#                 drowned | dreamer (any word works; see site/app.js for the labels).
 id: mercy-island
 title: Fog Over Mercy Island
 series: A solo investigation, 1926
@@ -25,10 +26,11 @@ blurb: |
 investigator_intro: Six people signed on with Professor Wren. Each of them knows something the island will test. Choose the one whose skills you will stake your life on.
 # Shape this story is held to by `gamebook stats` and the test suite.
 targets:
-  sections: [120, 140]
+  sections: [150, 175]
   path_mean: [20, 30]
   companion_break: [0.1, 0.5]
-  endings_reached: 8
+  endings_reached: 15
+  cosmetic_choices: 0.1
 start: 1
 on_death: 129
 on_madness: 130
@@ -264,7 +266,7 @@ items:
     text: Hymns copied out by hand. The tunes are familiar. The words are wrong.
   boathouse-key:
     name: Boathouse key
-    text: Black iron, as long as your hand. Jonah stole it for you.
+    text: Black iron, as long as your hand. It opens the boathouse where Mercy keeps its whaleboat.
 
 journal:
   HYMN: You heard the hymn across the water. It was Rock of Ages, with the wrong words.
@@ -288,8 +290,13 @@ journal:
   PROOF: You have a record of what lies under the ice.
   CAPTIVE: You came to the Throat bound, as an offering.
   RELEASED: Mother Gale let you go. Nobody in Mercy will stop you leaving.
-  ABOARD: Jonah Pruitt left Mercy with you in the whaleboat.
+  ABOARD: Jonah Pruitt left Mercy with you.
   SKETCH: Mae drew the Sleeper, and keeps the drawing buttoned inside her coat.
+  FLED: You ran from Ezekiel's lances into the fog.
+  HUT: You slept in the Scotchman's hut on the ridge above Mercy, not under their roof.
+  BOATHOUSE: Mercy keeps a boat in a locked shed on the shingle. The key hangs on a nail inside the meeting-house door.
+  MORAINE: You walked the moraine on the east side of the White by night. It leads clear of the crevasses, up to the Throat.
+  REEF: Jonah Pruitt promised to take you through the reef in the whaleboat.
 
 sections:
   # ===================================================================== ACT ONE: THE FOG
@@ -691,6 +698,95 @@ sections:
         to: 32
       - text: "Follow the footprints and find out who made them."
         roll: {skill: Track, success: 38, failure: 29}
+      - text: "Follow the footprints down into the surf."
+        to: 137
+      - text: "Push off in the dory, now, the way Lund wants."
+        requires: {note: DORY}
+        to: 139
+
+  137:
+    title: Into the Surf
+    effects:
+      - san: "0/1D3"
+    text: |
+      The footprints go down the black sand and into the sea, and so do you.
+
+      The first wave fills your boots. The second is at your knees, and it is *warm*, warm as bathwater, which the North Pacific has never been in the history of the world. Through the clear green water you can see the prints going on ahead of you down the sand, crisp and deep, as if they were made a minute ago. The sea has not touched them.
+
+      Far out, under the water, somebody is singing. You can feel it in your shins.
+
+      Behind you on the beach, Lund is roaring your name. He will not come in after you. None of them will.
+    choices:
+      - text: "Turn back, and take the coast path north, well away from the water."
+        to: 29
+      - text: "Keep walking. They are singing for you."
+        to: 138
+
+  138:
+    title: The Congregation Below
+    ending: drowned
+    text: |
+      You walk until the water closes over your head, and you find that you can breathe it. It is the easiest thing you have ever learned.
+
+      The prints lead down a long slope of black sand into the green dark. At the bottom of the slope there is a church.
+
+      It is built of whale ribs, and the pews are full. Sealers in the clothes of 1843. Women in bonnets. A big fair-haired sailor with a face very like Lund's. And in the third row, with his pipe in his mouth and his cap on his knee, sits Captain Brandt. He nods to you as if you were late for the service and he had kept you a seat.
+
+      They are singing *Rock of Ages*. Down here they know the right words, and the right words are worse.
+
+      Up on the beach, Lund shouted himself hoarse. Wren stood at the water's edge with his head on one side, listening. Mae drew the footprints going down into the sea, and one more set beside them. It is the last page of her sketchbook that anyone can bear to look at.
+
+      Nobody follows footprints into the sea. You knew that. Some part of you always knew that.
+
+  139:
+    title: Lund's Way
+    text: |
+      Lund is dragging the dory down the sand before you have finished saying it. Mae snatches up her sketchbook and runs to help him.
+
+      Wren does not move.
+
+      "No," he says. He says it quite pleasantly, the way he would decline a second cup of tea. "No, I don't think so. We've come all this way. The Throat is up there, under the glacier. Halloway walked to it. So shall I."
+
+      The surf is small this morning. Lund has the dory afloat in the shallows and is holding her bow to the swell, looking back at you over his shoulder. "*Now*," he says. "Before they come back."
+    choices:
+      - text: "Have Lund carry the Professor aboard, kicking if he must."
+        requires: {with: lund}
+        effects:
+          - companion: wren
+            san: "-1D3"
+        roll: {skill: [Navigate, Pilot (Boat), CON], success: 140, failure: 127}
+      - text: "Leave the Professor to his island, and row."
+        effects:
+          - companion: wren
+            status: lost
+          - companion: all
+            san: "0/1D3"
+        roll: {skill: [Navigate, Pilot (Boat), CON], success: 140, failure: 127}
+      - text: "Let him win. Haul the dory back up the sand, and turn inland after all."
+        to: 32
+
+  140:
+    title: Before Breakfast
+    ending: escape
+    text: |
+      Lund rows like a man possessed. By the time the sun is properly up, the island is a grey hump in the fog astern, and then it is nothing at all.
+
+      Four days later, burned by the wind and half mad with thirst, you are picked up by a halibut schooner out of Sand Point. Her skipper hears your story out and spits over the side. Then he asks whether you saw any singing people while you were there. When you say yes, he gives Lund a long look, and Lund gives him one back, and nothing more is said about it all the way to Unalaska.
+
+      You came to the end of the world to find the island Ewan Halloway swore was real. You found it. You left it before breakfast.
+
+      For the rest of your life you never know what was under that glacier. Most nights, you are glad.
+    extra:
+      - requires: {with: wren}
+        text: Wren does not speak to you for the whole voyage, nor for some years after. He never mounts another expedition. But every summer he writes to the Navy to ask whether anyone has charted an island west of Atka. Nobody ever has.
+      - requires: {gone: wren}
+        text: Professor Hollis Wren is listed as lost with the *Kittiwake*. In 1931 a Navy survey plane passes over the island's position and reports nothing but fog. You do not ask the pilot whether he heard anything.
+      - requires: {broken: wren}
+        text: Wren hums the whole way to Unalaska, and the whole way home, and for the rest of his life.
+      - requires: {with: mae}
+        text: Mae draws the island from memory on the voyage home, over and over. She can never get the glacier right, and she will not say what is wrong with it.
+      - requires: {with: lund}
+        text: Lund goes back to sea. Of all of you, he is the only one who never once looks back.
 
   # ----------------------------------------------------- The coast
   29:
@@ -834,6 +930,8 @@ sections:
         roll: {skill: [STR, Climb], success: 39, failure: 40}
       - text: "Call down to him, calm and friendly."
         roll: {skill: [Charm, Persuade, Fast Talk], success: 39, failure: 40}
+      - text: "Drop out of sight, and trail him when he runs for home."
+        roll: {skill: [Stealth, Track], success: 162, failure: 40}
 
   39:
     title: Jonah Pruitt
@@ -864,6 +962,23 @@ sections:
     choices:
       - text: "Follow."
         to: 41
+
+  162:
+    title: The Long Shed
+    effects:
+      - note: EGGS
+      - note: BOATHOUSE
+    text: |
+      You drop back behind a hummock and let him climb. He comes over the edge, snatches up his stake and runs, and you go after him, a long way back, from rock to rock.
+
+      He leads you north along the cliffs for a mile. Then the fog parts below you, and there is a village: sod roofs smoking in a hollow above a shingle beach, drying racks hung with split fish, and a building with a little bell tower. On the shingle stands a long, low shed with its doors chained.
+
+      As you watch, a tall grey-bearded man comes out of the shed. He locks the chain with a padlock, walks up to the bell-tower building and hangs the key on a nail just inside its door. A boat-shed, then, and its key, kept by a man who expects nobody in the world to touch either.
+
+      The boy runs straight to him, pointing back the way he came. Pointing at you.
+    choices:
+      - text: "Stand up and show yourself, before they come looking."
+        to: 41
   # ===================================================================== ACT TWO: MERCY LANDING
   41:
     title: Lances in the Fog
@@ -880,6 +995,9 @@ sections:
 
       "You'll state your business," says Ezekiel Gale, "and then we'll see."
     extra:
+      - requires: {note: BOATHOUSE}
+        before: true
+        text: You stand up on the cliff top with your hands empty. The grey-bearded man looks up at you for a long moment, then calls out five names and walks back into the fog.
       - requires: {note: JONAH}
         text: Jonah Pruitt steps out from behind you, chin up, though his voice shakes. "They're shipwrecked, Uncle Zeke. They're only shipwrecked. They found me on the murre cliff, and did me no harm."
     choices:
@@ -897,6 +1015,8 @@ sections:
       - text: "Bring up the rifle. Let them see you're not helpless."
         requires: {item: rifle}
         to: 46
+      - text: "Turn and run, back into the fog."
+        to: 141
 
   42:
     title: Guests
@@ -916,11 +1036,15 @@ sections:
       - note: SUSPECT
       - lose: rifle
     text: |
-      Your words fall flat in the fog. Ezekiel Gale listens without expression. When you have finished, he holds out one big hand.
+      Ezekiel Gale looks at you for a long moment without expression. Then he holds out one big hand.
 
       "Your weapons," he says. "Guests carry no steel in Mercy."
 
-      Lund looks at you. You shake your head, and he unbuckles his belt knife. Nobody thinks to search his boot. They take everything that could cut or shoot. Then they march you into the settlement, a lance at your back, as the silent faces watch from every doorway.
+      Lund looks at you. You shake your head, and he unbuckles his belt knife. Nobody thinks to search his boot. They take everything that could cut or shoot.
+    extra:
+      - requires: {item: flare-pistol}
+        text: Ezekiel turns Brandt's stubby flare pistol over in his big hands, decides it is a child's toy, and hands it back.
+      - text: Then they march you into the settlement, a lance at your back, as the silent faces watch from every doorway.
     choices:
       - text: "Go where you're taken."
         to: 52
@@ -966,6 +1090,24 @@ sections:
         roll: {skill: Firearms (Rifle), success: 47, failure: 48}
       - text: "Lower the rifle."
         to: 43
+      - text: "Shoot Ezekiel Gale where he stands."
+        to: 151
+
+  151:
+    title: A Fair Question
+    ending: death
+    text: |
+      You put the bullet through Ezekiel Gale's chest at six paces.
+
+      He looks down at it. He looks up at you. Then he sits down in the mud, quite slowly, like an old man settling on a bench, and he does not get up again.
+
+      For one long moment nobody in Mercy moves. Then a woman screams in a doorway, and another, and the scream runs down the lane from house to house like fire along a fuse. The doors open, and they come. Not six of them. All of them. Old men with flensing knives. Women with gaff hooks. Boys with stones.
+
+      You work the bolt. You fire again. You fire again.
+
+      He asked you how many bullets you had. It was a fair question, and you never stopped to answer it. There were forty of them, and you had five.
+
+      What they do with the others, you never learn. It is the only mercy Mercy shows you.
 
   47:
     title: Thunder
@@ -1000,6 +1142,10 @@ sections:
         roll: {skill: Dodge, success: 50, failure: 51}
       - text: "Grab the shaft and wrench it away."
         roll: {skill: Fighting (Brawl), success: 50, failure: 51}
+      - text: "Break away, and run for the fog."
+        effects:
+          - note: FEUD
+        to: 141
 
   50:
     title: A Voice Like a Bell
@@ -1086,6 +1232,8 @@ sections:
         to: 56
       - text: "Tell her a Coast Guard cutter is already searching for you."
         roll: {skill: [Fast Talk, Persuade, Charm], success: 57, failure: 58}
+      - text: "Thank her, but refuse her roof. You'll sleep somewhere of your own choosing."
+        to: 142
       - text: "Thank her for her hospitality, and say nothing more."
         to: 59
 
@@ -1136,10 +1284,14 @@ sections:
 
   56:
     title: No Boat For You
+    effects:
+      - note: BOATHOUSE
     text: |
       "There's the whaleboat," she says. "But the whaleboat's for the hunt, and the hunt's for Mercy." She smiles her three-toothed smile. "The Company sloop will come at the equinox, as it always does. You'll go home on that."
 
       You do not need to be a mind-reader. No sloop has come to Mercy since 1843.
+
+      But when she speaks of the whaleboat, her eyes go, just for a moment, to the door. Inside it, on a nail, hangs a black iron key as long as your hand. Later, from the lane, you see the shed it must belong to: long and low, down on the shingle, its doors chained shut.
     choices:
       - text: "Thank her, and go."
         to: 59
@@ -1170,6 +1322,202 @@ sections:
       - text: "Go quietly."
         to: 59
 
+  # ----------------------------------------------------- Outside Mercy
+  141:
+    title: Into the Fog
+    effects:
+      - note: FLED
+    extra:
+      - requires: {note: FEUD}
+        before: true
+        text: Behind you, in the mud of the lane, the man you shot is still screaming.
+      - requires: {note: JONAH}
+        text: Jonah Pruitt does not run with you. The last you see of him, he is standing in the lane with his mouth open, and Ezekiel's hand is on his shoulder.
+      - text: The ground rises. Rock, and heather, and the cry of a bird. A lance-man looms out of the white ten yards away, looking the wrong way.
+    text: |
+      You run, and the others run with you.
+
+      The fog takes you in a dozen strides. Behind you somebody shouts. The shout is taken up and passed along, and then there are feet pounding on the turf on every side, and you cannot tell whether they are behind you or ahead. Lund has Wren by the arm and is half carrying him. Mae is at your elbow, white to the lips.
+    choices:
+      - text: "Freeze, then slip away uphill from rock to rock."
+        roll: {skill: [Stealth, Survival (Arctic)], success: 142, failure: 143}
+
+  143:
+    title: Run Down
+    effects:
+      - note: SUSPECT
+      - lose: rifle
+    text: |
+      The fog that hid you gives you away. You blunder out of it onto a bare ridge, and Ezekiel and his men are waiting there in a half-ring, lances levelled, breathing no harder than men out for a Sunday walk. They grew up in this fog. You did not.
+
+      Ezekiel Gale holds out his hand for your weapons. He takes everything that could cut or shoot, and nobody thinks to search Lund's boot.
+    extra:
+      - requires: {item: flare-pistol}
+        text: Ezekiel turns Brandt's stubby flare pistol over in his big hands, decides it is a child's toy, and hands it back.
+      - text: |
+          "Nobody comes to Mercy," he says. "And nobody runs from it." He turns his back on you, as if you were no danger at all, and walks down the hill. The lances follow you all the way.
+    choices:
+      - text: "Go where you're taken."
+        to: 52
+
+  142:
+    title: The Scotchman's Hut
+    effects:
+      - note: HUT
+    extra:
+      - requires: [{note: FLED}, {no_note: SUSPECT}]
+        before: true
+        text: You lie up among the rocks for hours while they quarter the hillside. The shouts fall away one by one, until there is only the wind, and the light is going. Nobody in Mercy, it seems, cares to follow strangers up this ridge after dark.
+      - requires: {any: [{no_note: FLED}, {note: SUSPECT}]}
+        before: true
+        text: "\"The Scotchman wouldn't sleep under our roof either,\" Mother Gale said, when you refused hers. \"His hut's still up on the ridge. Zeke'll show you.\" Ezekiel walked you up himself, without a word, and left you at the door."
+    text: |
+      On the ridge above the Landing stands a hut of drystone and turf, roofed with whale ribs and sods, with a door of ship's planking hung on leather hinges. Cut deep into the lintel are two letters and a date: *E. H. 1881.*
+
+      Ewan Halloway slept here. Inside there is a bunk built against the wall, a fireplace black with old soot, and a stack of dry peat that somebody has kept up for forty-five years. On a shelf sits a rusted cocoa tin.
+
+      From the doorway you can see the whole of Mercy below you: the sod roofs, the lane, the meeting-house with its little tower, and down on the shingle a long, low shed with its doors shut. Beyond the village and the tundra, the White climbs into the clouds. As the light goes, it begins to glow.
+
+      At the hour when church bells would ring in a Christian town, the singing begins below. Wren sits in the doorway with his eyes closed, and listens to every note.
+    choices:
+      - text: "Open the cocoa tin, and read whatever is inside by firelight."
+        roll: {skill: [Library Use, History, Occult], success: 144, failure: 145}
+      - text: "Keep watch on the village through the night."
+        to: 146
+      - text: "Bar the door, build up the fire, and sleep while you can."
+        to: 147
+
+  144:
+    title: To Whoever Sleeps Here
+    effects:
+      - note: VERSE
+      - san: "0/1"
+    text: |
+      Inside the tin, wrapped in oilcloth, are three sheets of paper folded small. The hand is small and cramped, and the signature at the bottom is Ewan Halloway's.
+
+      *May the 2nd, 1882. To whoever sleeps here after me.*
+
+      *I go home tomorrow in their whaleboat, if Temperance Gale keeps her word, and I think she will. She is the Captain's daughter, a hard, handsome woman of five-and-thirty, and the only soul in Mercy who will talk plainly to me. Last night she sang me a verse they keep at the back of their book, under a black rule. It is to be sung only when He stirs. She says nobody has ever had to sing it, and she prays nobody ever will.*
+
+      *I have written it below. If you are reading this, perhaps you will need it.*
+
+      *Now the singing's done, and still;*
+      *Sink, Old Dreamer, as you will.*
+      *Not our voices, not our bones;*
+      *Leave us silence, leave us stones.*
+
+      *It goes to Toplady, the tune we know as Rock of Ages. God keep you. E. H.*
+
+      You read it three times by the firelight. Then you find that you know it by heart.
+    choices:
+      - text: "Fold the pages back into the tin, and sleep."
+        to: 147
+
+  145:
+    title: Mould
+    effects:
+      - san: "0/1"
+    text: |
+      Forty-five winters have got into the tin. The papers inside are a soft grey cake of mould. You peel them apart a sheet at a time, and they come away in your fingers like wet bread.
+
+      One line survives, in a small, cramped hand near the bottom of a page: *...only when He stirs, and God help whoever has to...*
+
+      The rest is gone. Outside, the singing goes on and on.
+    choices:
+      - text: "Put the tin back on its shelf, and try to sleep."
+        to: 147
+
+  146:
+    title: The Watch
+    effects:
+      - note: BOATHOUSE
+      - san: "0/1"
+    text: |
+      You sit in the doorway with your coat round your knees and watch Mercy through the night.
+
+      The singing stops at last, and the village does not go to bed. Lanterns come out of the doors one by one and go down the lane to the shingle. You count thirty. They walk down the beach in a long, quiet line and straight into the sea, lanterns held high, until the water is at their chests. And there they stand in the black water and sing again, softly, out toward the open ocean, as if somebody out there were listening.
+
+      Toward morning they wade out of the surf and go home, and the tide comes in over their footprints.
+
+      The last man up the beach is the tall grey-bearded one, Ezekiel. He stops at the long, low shed on the shingle, the boathouse where Mercy keeps its whaleboat, and tries the padlock on its chain. Then he walks up to the meeting-house and hangs a key on a nail just inside the door, where anyone could reach it. Nobody in Mercy steals.
+    choices:
+      - text: "Sleep at last, as the sky goes grey."
+        to: 147
+
+  147:
+    title: The Empty Bunk
+    effects:
+      - companion: wren
+        status: lost
+      - companion: all
+        san: "1/1D3"
+      - san: "0/1D2"
+    text: |
+      You wake to the bell.
+
+      Grey light. Cold air. The hut door stands open, and the bunk where Wren lay is empty. His footprints go away through the frost on the heather, straight down the hill toward the village, as straight as a man walks when he knows exactly where he is going.
+
+      Below you the ship's bell in the meeting-house tower is tolling slowly, over and over, the way bells toll for a funeral. The whole village is gathering in the lane in its Sunday black, eighty years out of fashion. An old woman in black stands on the meeting-house steps, leaning on Ezekiel's arm. *Mother Gale*, the crowd murmurs, the way a congregation says *amen*.
+
+      Beside her, in a long robe of sealskin, stands Professor Hollis Wren. He is smiling.
+
+      Her voice carries up the hill, thin and clear in the still air. "He's offered himself, of his own free will. Tonight at moonrise he gives his voice. Let it be written so."
+
+      Then the whole village turns and walks away up the valley toward the White, singing, with Wren in the middle of them. The bell stops. Mercy is empty.
+    extra:
+      - requires: {with: mae}
+        text: "Mae is gripping your arm so hard it hurts. \"We have to go after him,\" she whispers. \"We *have* to.\""
+      - requires: {broken: mae}
+        text: Mae has not looked up from her sketchbook. She is drawing the bell.
+      - requires: {with: lund}
+        text: "Lund watches them go with his knife in his hand. \"Whole damned village up the hill,\" he says. \"Nobody left down there to stop us doing anything.\""
+      - requires: {broken: lund}
+        text: Lund is sitting on the bunk, talking to his drowned brother, who is apparently in favour of going home.
+    choices:
+      - text: "Follow them up toward the White, at a distance."
+        to: 86
+      - text: "Slip down into the empty village while they are all on the hill."
+        to: 148
+      - text: "Make for the dory on the black-sand beach, and go."
+        requires: {note: DORY}
+        to: 117
+
+  148:
+    title: The Empty Village
+    text: |
+      Mercy is a village with the people taken out of it. Doors stand open on cold hearths. A dog watches you from under a drying rack and does not bark. A child's rag doll lies face down in the lane.
+
+      The meeting-house door is unlatched. Inside, it smells of tallow and old fish. The whale ribs arch overhead, and the hymn board behind the pulpit has its numbers chalked up ready for Sunday.
+
+      Under the pulpit is a sea-chest, iron-bound and padlocked, with the letters *G & P S Co.* burned into the lid.
+    extra:
+      - requires: {note: BOATHOUSE}
+        text: Just inside the door, on its nail, hangs the boathouse key.
+    choices:
+      - text: "Force the sea-chest."
+        roll: {skill: [Mechanical Repair, STR], success: 66, failure: 150}
+      - text: "Take the key, and run for the boat in the shed on the shingle."
+        requires: {note: BOATHOUSE}
+        effects:
+          - gain: boathouse-key
+        to: 115
+      - text: "Leave it all, and go up the White after Wren."
+        to: 86
+
+  150:
+    title: The Two Who Stayed
+    effects:
+      - hp: "-1D3"
+    text: |
+      The hasp will not give. You hammer at it with the iron foot of a lamp bracket, and the noise booms round the whale ribs like a drum.
+
+      Two men stayed behind when the village went up the hill. You learn this when they come through the door with their lances. They have already caught Mae and Lund in the lane. You fight, and you lose. They bind all three of you with wet sealskin cord and leave you trussed on the meeting-house floor all day, under the hymn board.
+
+      In the late afternoon they haul you to your feet and march you out after the Choir.
+    choices:
+      - text: "Walk. You have no choice."
+        to: 95
+
   59:
     title: The Cooper's House
     effects:
@@ -1191,8 +1539,6 @@ sections:
       "Hush," says Wren, without opening his eyes. "I'm *listening*."
 
       Mae holds up her sketchbook to you, turned so the others cannot see. She has drawn the glacier from the window, and beneath it, faint, in lines so light they are almost not there, she has drawn something lying in the ice. She did not mean to, she whispers. Her hand just did it.
-
-      There is time, perhaps, to do one thing tonight before you sleep.
     extra:
       - requires: {any: [{note: SUSPECT}, {note: FEUD}]}
         text: A man with a lance stands under the eaves across the lane. Every so often you see the glow of his pipe.
@@ -1202,6 +1548,7 @@ sections:
         text: Lund is talking to somebody in the corner who is not there.
       - requires: {no_note: JONAH}
         text: Across the lane, a pale-haired boy watches the house from behind the drying racks. He has been there since the singing ended.
+      - text: There is time, perhaps, to do one thing tonight before you sleep.
     choices:
       - text: "A woman came to the door asking whether any of you has outside medicine. Her child is sick. Go with her."
         to: 60
@@ -1216,6 +1563,8 @@ sections:
       - text: "Slip out to the pale-haired boy across the lane."
         requires: {no_note: JONAH}
         roll: {skill: [Charm, Fast Talk, Persuade], success: 133, failure: 75}
+      - text: "Slip out alone, toward the glow on the glacier."
+        to: 152
       - text: "Stay in, and look after your companions."
         to: 77
 
@@ -1330,7 +1679,11 @@ sections:
       *GOD FORGIVE ME IT NEVER ASKED FOR HIM*
     choices:
       - text: "Hide the ledger under your coat and get out."
+        requires: {no_note: HUT}
         to: 80
+      - text: "Hide the ledger under your coat, and go up the White after Wren."
+        requires: {note: HUT}
+        to: 86
 
   67:
     title: The Mercy Hymnal
@@ -1378,7 +1731,7 @@ sections:
   70:
     title: Caught
     text: |
-      You are halfway down the aisle when a lantern flares in the doorway behind you. Ezekiel Gale stands there with a lance in one hand and the lantern in the other, his long face stone-still.
+      A lantern flares in the doorway behind you. Ezekiel Gale stands there with a lance in one hand and the lantern in the other, his long face stone-still.
 
       "Thief," he says. "In the Lord's house."
     choices:
@@ -1404,6 +1757,10 @@ sections:
       - lose: rifle
       - companion: wren
         status: lost
+    extra:
+      - requires: {note: REEF}
+        before: true
+        text: They take Jonah away separately, up the lane, with his mother screaming at Ezekiel from her doorway.
     text: |
       They put you in the ice-house, a stone cellar dug into the hillside where Mercy keeps its winter meat. It is pitch dark. It is very cold. The hanging seal carcasses brush your face.
 
@@ -1451,6 +1808,7 @@ sections:
     effects:
       - note: JONAH
       - note: TITHE
+      - note: REEF
       - gain: boathouse-key
     text: |
       Jonah Pruitt leads you through the dark, between the drying racks and down to a long, low shed above the shingle. He unlocks it with a key as long as your hand.
@@ -1469,6 +1827,8 @@ sections:
         to: 80
       - text: "Leave the powder, and promise him you'll come."
         to: 80
+      - text: "Go tonight. Wake the others, and take the boat now."
+        to: 155
 
   133:
     title: The Boy at the Racks
@@ -1483,6 +1843,105 @@ sections:
     choices:
       - text: "Follow him into the dark."
         to: 76
+
+  155:
+    title: Tonight
+    text: |
+      "*Tonight?*" Jonah stares at you. "There's no moon. I'd have to feel for the gap in the reef with my eyes shut." He swallows. Then he nods, once, like a boy who has been dared to jump off the murre cliff and has always meant to. "Bring them, then. Quick. I'll have her on the rollers."
+
+      You go back up the lane in the dark, keeping to the shadows of the drying racks.
+    extra:
+      - requires: {any: [{note: SUSPECT}, {note: FEUD}]}
+        text: The man under the eaves across the lane has his chin on his chest. His pipe has gone out.
+      - text: |
+          The cooper's house is warm and close and smells of peat smoke.
+
+          Wren is not asleep. He is lying on his back with his eyes open, listening to a song that stopped an hour ago.
+      - requires: {with: mae}
+        text: Mae wakes at a touch, understands at once, and has her boots on before you have finished whispering.
+      - requires: {broken: mae}
+        text: Mae is sitting up, drawing. She lets you lead her by the hand like a child.
+      - requires: {with: lund}
+        text: Lund is awake already, knife in hand. He looks at you, and at Wren, and waits for you to say it.
+      - requires: {broken: lund}
+        text: Lund comes when you beckon, still murmuring to his brother. You pray he will keep his voice down.
+    choices:
+      - text: "Talk the Professor round, in a whisper."
+        roll: {skill: [Persuade, Psychology, Charm], success: 156, failure: 157}
+      - text: "Have Lund carry him, with a big hand over his mouth."
+        requires: {with: lund}
+        roll: {skill: [Stealth, DEX], success: 156, failure: 157}
+      - text: "Leave the Professor where he lies. Take only Mae and Lund."
+        effects:
+          - companion: wren
+            status: lost
+        to: 156
+
+  156:
+    title: The Reef in the Dark
+    text: |
+      The whaleboat goes down the rollers with a rumble you are sure the whole village can hear, and into the black water. Nobody comes. Up in the houses, not one lamp is lit.
+
+      Jonah takes the steering oar. The rest of you take the sweeps. Ahead, the reef is only a sound: a long white roar in the dark, now on the left, now on the right, now everywhere at once.
+
+      "Pull when I say," Jonah whispers. "Not before. *Not before.*"
+    extra:
+      - requires: {with: wren}
+        text: Wren sits in the bottom of the boat with his hands in his lap, humming very softly. You let him.
+    choices:
+      - text: "Pull when Jonah says, and pray."
+        roll: {skill: [Pilot (Boat), Navigate, STR], bonus: 1, success: 159, failure: 158}
+
+  157:
+    title: Lanterns
+    text: |
+      It goes wrong all at once. Wren pulls away from you, and his voice rises into the dark, clear and sweet and far too loud, *Rock of Ages, cleft for Thee*. A dog barks. A door bangs. Then there are lanterns in the lane, a dozen of them, and lances under the lanterns.
+
+      Ezekiel Gale is at the front, in his shirtsleeves. He does not say anything at all. He does not need to.
+    choices:
+      - text: "Let them take you."
+        to: 72
+
+  158:
+    title: The Reef Bites
+    effects:
+      - hp: "-1D4"
+    text: |
+      Jonah shouts *now*, and you pull, a heartbeat too late. The reef catches the whaleboat a glancing blow under the bow. She slews round, ships a sea, and throws you all into the black surf.
+
+      You come up choking, and somebody is hauling at your collar. Lanterns are bobbing along the shingle, a dozen of them, and men are wading out into the surf with boathooks to drag you in like seals. Behind them, more men wade out with lines to the swamped whaleboat and tow her home.
+
+      Ezekiel Gale stands at the water's edge with a lantern in his hand. He watches you all brought ashore, one by one, and counts you as you come.
+    choices:
+      - text: "Let them take you."
+        to: 72
+
+  159:
+    title: Through the Reef
+    ending: escape
+    text: |
+      Jonah says *now*, and you pull with everything you have. The white roar goes by so close on either side that you feel its spray on both cheeks. Then the water under the boat is long and slow and black, the reef is behind you, and Jonah Pruitt is laughing and crying at the steering oar at the same time.
+
+      You row all night and sail all the next day. On the ninth day out you raise Atka. A man on the jetty asks Jonah what ship he is off, and Jonah tells him, quite truthfully, that he has never been on a ship in his life.
+
+      Jonah goes on to Seattle. He learns to drive a motor truck, and he eats an orange every day for a year.
+
+      You never see the Throat. You never see what sleeps under the White. Some nights that is the greatest regret of your life, and some nights it is the greatest mercy.
+    extra:
+      - requires: {with: wren}
+        text: Mercy gave the White a voice that winter anyway. Somebody went up the hill in the Professor's place. Jonah has a letter about it in 1928, the only letter he ever gets from home, and he burns it without telling you whose name was in it. Wren never forgives you for taking him off the island, and never stops thanking you, sometimes in the same sentence.
+      - requires: {gone: wren}
+        text: You left Professor Hollis Wren on Mercy Island, lying on his pallet, listening. You tell his sister in Burlington that he was lost with the *Kittiwake*. It is very nearly true.
+      - requires: {broken: wren}
+        text: Wren hums all the way to Atka. He hums in the hospital in Vermont, too, and the nurses say it is beautiful.
+      - requires: {with: mae}
+        text: Mae draws Jonah at the steering oar, laughing in the dark. It hangs over his bed in Seattle for the rest of his life.
+      - requires: {broken: mae}
+        text: Mae draws the same eye all the way to Atka. Jonah is the only one who can make her stop, by singing to her. He sings sea shanties, with the proper words.
+      - requires: {with: lund}
+        text: Lund and Jonah sign on together for the halibut fleet out of Ballard. Lund teaches him to swear in Norwegian.
+      - requires: {broken: lund}
+        text: Lund is put ashore at Atka, talking to his brother. Jonah sits with him every day until the steamer comes.
 
   77:
     title: Your Companions
@@ -1530,6 +1989,66 @@ sections:
       - text: "Give up, and try to sleep."
         to: 80
 
+  152:
+    title: The Glow
+    extra:
+      - requires: {any: [{note: SUSPECT}, {note: FEUD}]}
+        before: true
+        text: The man under the eaves across the lane does not turn his head as you pass. He is watching the glacier too, and his lips are moving.
+    text: |
+      You tell yourself you only want air. You ease the door open and step out into the lane, and the cold closes round you like water.
+
+      The glacier is glowing. From out here, away from the peat smoke, it is brighter than it looked through the window: a long, cold blue light laid across the sky, like the light under a door. You walk toward it to see it better. Only a little way.
+
+      You do not remember leaving the village. You do not remember the tundra. When you next notice your own feet, they are stepping over the stones of a moraine. The wall of the White stands over you, two hundred feet high, blue and breathing. The singing is not out there in the night any more. It is inside your head, and it is very kind.
+
+      There is a gap in the ice ahead of you, a dark crack that goes up and in. It would be warm in there. Somebody is waiting.
+    choices:
+      - text: "Go in. Only a little way. Only to look."
+        to: 153
+      - text: "Turn round, and fight the pull every step of the way back."
+        roll: {skill: POW, success: 154, failure: 153}
+
+  153:
+    title: Sleepwalker
+    ending: choir
+    effects:
+      - companion: wren
+        status: with
+    text: |
+      It is warm inside the ice, and blue, and you walk a long way in, singing.
+
+      They find you at dawn, when the bell has rung and the whole village has come up the valley in its Sunday black. You are sitting cross-legged in the mouth of the Throat, singing in a clear, sweet voice, in the old syllables that no human tongue was made for. Nobody taught them to you. You simply know them.
+
+      Mother Gale stands over you a long while, leaning on Ezekiel's arm. Then she smiles, and you see that she has three teeth.
+
+      "Well," she says. "Here's one that came on their own two feet. Nobody's done that since the Captain's day." She pats your cheek. "The Professor can go home, then. You've the better ear."
+
+      Every child in Mercy knows not to walk out to the White alone at night. Nobody thought to tell you. Nobody thought they would have to.
+
+      They row your companions to Atka in the spring. You do not see them go. By then you are a long way down, very happy, and singing.
+
+      Professor Wren goes home to Vermont and keeps bees. He keeps your photograph on his desk, and sometimes, when he catches himself humming, he stops and looks at it for a long time.
+    extra:
+      - requires: {with: mae}
+        text: Mae draws you from memory, sitting in the mouth of the Throat, smiling. It is the best thing she ever does. She never shows it to anyone.
+
+  154:
+    title: The Long Way Back
+    effects:
+      - note: MORAINE
+      - hp: "-1"
+      - san: "0/1D3"
+    text: |
+      You turn round. It is like turning a ship in a gale. Every step away from the ice is a step up a steep hill, and the singing in your head stops being kind and begins to plead, and then to weep.
+
+      You keep walking. You walk along the crest of the moraine because it is the only high ground, and that is how you learn it: a long, broken ridge of boulders running up the east side of the White, solid underfoot, clear of the crevasses, curving round toward a dark notch high in the ice. In the blue glow you can see every stone.
+
+      By the time the singing lets you go, the stars are fading. You reach the cooper's house in the last of the dark, frozen to the bone, and crawl under your blanket without waking anyone.
+    choices:
+      - text: "Sleep, for what is left of the night."
+        to: 80
+
   # ----------------------------------------------------- The morning of the tithe
   80:
     title: The Day of the Tithe
@@ -1554,7 +2073,7 @@ sections:
     extra:
       - requires: {note: HEALER}
         text: As the procession passes, Hepzibah Pruitt drops something through your window, a scrap of paper with a line in pencil. *The Throat by the moraine path, round the east side. Not the crevasses.*
-      - requires: [{note: JONAH}, {item: boathouse-key}]
+      - requires: {note: REEF}
         text: Jonah walks at the back of the procession, singing with the rest. As he passes he catches your eye and mouths one word. *Boathouse.*
       - requires: {note: FEUD}
         text: Two men with lances stay behind in the lane, watching the cooper's house. One of them has a coil of rope over his shoulder. When the bell stops, they drift off up the lane after the others.
@@ -1564,14 +2083,14 @@ sections:
         text: The hymnal is still under your pallet. Nobody comes for it. Nobody has time.
       - requires: {note: TITHE}
         text: You know exactly what *give his voice* means. One voice, given to the ice, every generation. Tonight it is Wren's.
-      - requires: {with: mae}
-        text: "Mae is gripping your arm. \"What do we do?\" she whispers. \"*What do we do?*\""
-      - requires: {broken: mae}
-        text: Mae sits on her pallet drawing the same eye, over and over. She does not look up at the bell.
       - requires: {with: lund}
         text: Lund's knife is in his hand.
       - requires: {broken: lund}
         text: Lund stands in the corner with his knife out, talking quietly to his drowned brother.
+      - requires: {broken: mae}
+        text: Mae sits on her pallet drawing the same eye, over and over. She does not look up at the bell.
+      - requires: {with: mae}
+        text: "Mae is gripping your arm. \"What do we do?\" she whispers. \"*What do we do?*\""
     choices:
       - text: "Go after Wren. Up the glacier, now, before moonrise."
         to: 86
@@ -1672,10 +2191,12 @@ sections:
   85:
     title: The Bargain
     extra:
+      - requires: {note: REEF}
+        text: You think of Jonah Pruitt, waiting at his boathouse last night for people who never came. You do not look for him on the shingle.
       - requires: {note: DORY}
-        text: Beyond the reef he casts you off in your own dory, fetched round from the black-sand beach, with a cask of water and a basket of smoked fish, and turns back for Mercy without a word.
+        text: Beyond the reef Ezekiel casts you off in your own dory, fetched round from the black-sand beach, with a cask of water and a basket of smoked fish, and turns back for Mercy without a word.
       - requires: {no_note: DORY}
-        text: Beyond the reef he casts you off in an old sealing skiff of theirs, with a cask of water and a basket of smoked fish, and turns back for Mercy without a word.
+        text: Beyond the reef Ezekiel casts you off in an old sealing skiff of theirs, with a cask of water and a basket of smoked fish, and turns back for Mercy without a word.
       - text: You can still hear the singing, very faintly, for a long time after the island is gone in the fog.
     effects:
       - san: "1/1D6"
@@ -1721,12 +2242,17 @@ sections:
         text: Mother Gale climbs beside you, leaning on your arm and a whalebone stick, breathing hard. "They'll not wait for me," she says. "They think I'm already up there. Hurry."
       - requires: {note: HEALER}
         text: You remember Hepzibah's note. *The moraine path, round the east side. Not the crevasses.*
+      - requires: {note: MORAINE}
+        text: You know the moraine on the east side. You walked it last night, half asleep, in the blue glow.
     choices:
       - text: "Climb the Choir's own path openly, with Mother Gale on your arm."
         requires: {note: ALLY}
         to: 94
       - text: "Take Hepzibah's moraine path. She knows the way."
         requires: [{note: HEALER}, {no_note: ALLY}]
+        to: 94
+      - text: "Take the moraine path you walked last night."
+        requires: [{note: MORAINE}, {no_note: ALLY}]
         to: 94
       - text: "Cross the crevasse field, straight up."
         requires: {no_note: ALLY}
@@ -1745,11 +2271,16 @@ sections:
     text: |
       The snow bridge gives without a sound. One moment there is snow under your boots. The next there is nothing, and you are falling through blue light, banging from wall to wall, until you strike a ledge forty feet down and lie there. The sky is a thin white crack far above you.
 
-      Above you someone is shouting your name. Lund comes down after you ledge by ledge, swearing, and hands Mae down behind him.
+      Above you someone is shouting your name.
+    extra:
+      - requires: {with: lund}
+        text: Lund comes down after you ledge by ledge, swearing, and hands Mae down behind him.
+      - requires: {broken: lund}
+        text: Lund comes down after you ledge by ledge, talking to his brother all the way, and hands Mae down behind him.
+      - text: |
+          When you can move, you find you are not at the bottom. Beside you a tunnel runs off into the ice, sloping downward, smooth as the inside of a horn. Something made it, and it was not water.
 
-      When you can move, you find you are not at the bottom. Beside you a tunnel runs off into the ice, sloping downward, smooth as the inside of a horn. Something made it, and it was not water.
-
-      Far off down the tunnel you can hear the singing.
+          Far off down the tunnel you can hear the singing.
     choices:
       - text: "Crawl into the tunnel."
         to: 93
@@ -1787,7 +2318,7 @@ sections:
     text: |
       You get inside the lance, take him round the waist and throw him. He goes skidding away across the ice, scrabbling and yelling, and fetches up against a hummock fifty feet down with the wind knocked out of him.
 
-      The second man looks at his friend, then at you, then at the big shape of Lund coming up behind you with a rock in each fist. He decides that the Throat needs him more urgently than this.
+      The second man looks at his friend, then at you, then at the big shape of Lund coming up behind you with a rock in each fist, muttering. He decides that the Throat needs him more urgently than this.
     choices:
       - text: "Climb on before they bring help."
         to: 94
@@ -1825,6 +2356,31 @@ sections:
     choices:
       - text: "Creep to the edge and look down."
         to: 97
+      - text: "Take off your glove, and lay your bare hand on the ice over the dark hide."
+        to: 160
+
+  160:
+    title: Skin to Skin
+    ending: dreamer
+    text: |
+      You take off your glove. You lay your palm flat on the ice, over the dark, folded hide beneath it.
+
+      The ice is warm. Then it is not ice at all.
+
+      You are vast. You are folded and furled and very, very old, lying in the dark at the bottom of the world with forty small, sweet voices singing in your skull, and one of them is Wren's, and you are *dreaming*. You dream a green city under the sea. You dream the stars wheeling into their places, one by one, slow as glaciers. You dream a small, warm creature in a wet coat with its hand pressed against your side, and you find it very interesting, and you hold on to it.
+    extra:
+      - requires: {with: lund}
+        text: Far away, a big man is trying to pull your hand off the ice. It will not come. In the end Lund gets the others out of the tunnel alive, and never tells anyone what your face looked like.
+      - requires: {broken: lund}
+        text: Far away, a big man sits down beside you in the tunnel and explains the whole thing to his drowned brother, very patiently, until somebody leads him away.
+      - requires: {with: mae}
+        text: Mae says your name over and over, very small and far away, like a bird at a window. She draws you from memory for the rest of her life, and never gets the smile right.
+      - requires: {broken: mae}
+        text: Mae sits by you and draws the eye. For once, she draws it from life.
+      - text: |
+          The people of Mercy find you in the spring, when they come up to cut ice for the meat-house. You are standing in the tunnel with your hand against the wall, frozen solid, and smiling. They do not try to move you. They sing to you instead, and leave you there.
+
+          There are things in this world that you do not touch. You knew it, and you touched it anyway.
 
   94:
     title: The Throat
@@ -1862,6 +2418,7 @@ sections:
         san: "1/1D3"
       - note: CAPTIVE
       - lose: rifle
+      - lose: boathouse-key
     text: |
       They march you up the glacier with your hands tied behind you and a lance-butt in your back. Mae and Lund are tied as well, ahead of you in the line. The last of the Choir walks around you singing, torches held high, and nobody looks at you. You understand that you are not prisoners. You are a gift being carried to the altar.
 
@@ -2302,15 +2859,14 @@ sections:
       The village is empty. Doors stand open. A pot has boiled dry over a dead fire. Up on the glacier the singing has stopped, or changed into something you do not want to name. Out to sea the fog has lifted for the first time since you came, and the horizon is a hard, clean line.
 
       Down on the shingle below the drying racks stands the long, low boathouse where Mercy keeps its whaleboat. Its doors are chained, and the chain is padlocked.
-
-      You have to get off this island.
     extra:
       - requires: {with: wren}
         text: Wren sits on a fish crate with his head in his hands. Every so often he hums three notes, catches himself, and stops.
       - requires: {gone: wren}
         text: Wren is not with you. Every time the wind changes you think you hear him singing.
       - requires: {note: RELEASED}
-        text: Somebody has run down ahead of you in the night. On a nail by the cooper's door hangs a black iron key as long as your hand, beside a basket of smoked fish. Mother Gale keeps her word.
+        text: Somebody has run down ahead of you in the night. On a nail by the boathouse doors hangs a black iron key as long as your hand, beside a basket of smoked fish. Mother Gale keeps her word.
+      - text: You have to get off this island.
     choices:
       - text: "Take the whaleboat. Mother Gale gave her word, and nobody will stop you now."
         requires: {note: RELEASED}
@@ -2319,6 +2875,11 @@ sections:
         to: 115
       - text: "Make for the boathouse and the whaleboat."
         requires: [{item: boathouse-key}, {no_note: RELEASED}]
+        to: 115
+      - text: "Fetch the boathouse key from its nail inside the meeting-house door."
+        requires: [{note: BOATHOUSE}, {no_item: boathouse-key}, {no_note: RELEASED}]
+        effects:
+          - gain: boathouse-key
         to: 115
       - text: "Break the padlock on the boathouse and take the whaleboat."
         requires: [{no_item: boathouse-key}, {no_note: RELEASED}]
@@ -2337,16 +2898,16 @@ sections:
 
       The reef lies across the mouth of the bay like a row of black teeth, and the surf breaks white across it.
     extra:
-      - requires: [{note: JONAH}, {item: boathouse-key}, {no_note: RELEASED}]
+      - requires: {note: REEF}
         text: Jonah Pruitt comes pelting down the shingle, a bundle of belongings tied up in a shirt. "I said I'd show you the way," he pants. He takes the steering oar as if he was born to it.
     choices:
       - text: "Let Jonah take her through the gap he knows."
-        requires: [{note: JONAH}, {item: boathouse-key}, {no_note: RELEASED}]
+        requires: {note: REEF}
         effects:
           - note: ABOARD
         roll: {skill: [Pilot (Boat), Navigate, STR], bonus: 1, success: 121, failure: 116}
       - text: "Take her through the gap in the reef."
-        requires: {any: [{no_note: JONAH}, {no_item: boathouse-key}, {note: RELEASED}]}
+        requires: {no_note: REEF}
         roll: {skill: [Pilot (Boat), Navigate, STR], success: 121, failure: 116}
 
   116:
@@ -2366,8 +2927,10 @@ sections:
     text: |
       You go south along the coast to the black sand. The dory is where you left it, above the tide line, half full of rainwater.
     extra:
+      - requires: {note: REEF}
+        text: You think of Jonah Pruitt and his boathouse, and the promise he made you. You do not go back.
       - requires: {no_note: RELEASED}
-        text: Behind you, up on the cliff top, there are figures in black against the sky. They are coming.
+        text: Behind you, up on the cliff top, there are figures in black against the sky. Somebody has seen you. They are coming.
     choices:
       - text: "Bail her out and row away. Nobody is coming after you."
         requires: {note: RELEASED}
@@ -2404,7 +2967,35 @@ sections:
       At a quarter past ten, a smudge of smoke appears on the eastern horizon. It is a ship, and she turns toward you.
     choices:
       - text: "Watch her come."
-        to: 122
+        to: 134
+
+  134:
+    title: The Cutter in the Bay
+    text: |
+      She comes in slowly, sounding as she comes: a grey steel ship with a gun forward and another aft, and a thread of smoke from her stack. She is the Coast Guard cutter *Haida*, out of Unalaska on the Bering Sea patrol. She anchors outside the reef, and a launch puts off from her side.
+
+      The launch finds the gap in the reef at the second try. A dozen sailors in pea-coats wade ashore with rifles, staring up at the sod roofs and the whale-rib arches as if they had rowed into a picture in a Sunday-school book. Behind them comes their captain, a Kansan with a face like a saddle.
+
+      He stands on the shingle for a long time, looking at the empty lane, the drying racks, the meeting-house with its little bell tower. Then he looks up at the White.
+
+      "My chart shows sixty fathoms and nothing at this position," he says. "I've been on this patrol nine years." He takes off his cap and turns it round in his hands. "Who in God's name lives here?"
+
+      Up on the ice, nothing moves.
+    extra:
+      - requires: {note: CUTTER}
+        text: You told Mother Gale a cutter was coming, guns and all. It was a lie when you told it. It isn't any more.
+      - requires: {note: JONAH}
+        text: A pale-haired figure comes running down the lane from the hill, barefoot, a bundle under his arm. It is Jonah Pruitt. He stops dead at the sight of the sailors and their rifles, and stares out at the steel ship the way a child stares at a Christmas tree.
+    choices:
+      - text: "Tell him everything: the Choir, the Throat, and what sleeps under the ice."
+        to: 135
+      - text: "Tell him only that you were wrecked, and get your own people aboard."
+        to: 136
+      - text: "Tell him you were wrecked, and ask him to take Jonah Pruitt too."
+        requires: {note: JONAH}
+        effects:
+          - note: ABOARD
+        to: 136
 
   121:
     title: Open Water
@@ -2428,6 +3019,8 @@ sections:
         to: 122
       - text: "Row east, toward Atka, by the sun and the swell."
         roll: {skill: [Navigate, Pilot (Boat), CON], success: 122, failure: 127}
+      - text: "Turn the bow west, and follow the shadow."
+        to: 161
   # ===================================================================== ENDINGS
   122:
     title: The Long Way Home
@@ -2466,11 +3059,79 @@ sections:
       - requires: {note: ABOARD}
         text: Jonah Pruitt goes to Seattle, learns to drive a motor truck and eats an orange every single day for a year. He does not talk about Mercy. Sometimes, though, he stops dead in the street when he hears a church choir, and his face goes very still.
 
+  135:
+    title: On the Record
+    ending: bittersweet
+    text: |
+      You tell him everything, standing on the shingle with his sailors listening, from the singing in the fog to the eye beneath the ice. It takes an hour. He does not interrupt once.
+
+      When you have finished, he looks up at the White for a long time. Then he sends a runner back to the launch, and that afternoon the *Haida*'s wireless talks to Unalaska about something other than the weather for the first time in its life.
+
+      The Navy comes in September: a survey ship and forty men. They find Mercy Landing empty. Every door stands open. The pots are cold, the fish racks full, the bell gone from the meeting-house tower. Up on the glacier the Throat has fallen in on itself, a raw blue scar. And on the black-sand beach there are footprints, a great many of them, broad and bare, going down into the sea.
+
+      None come back.
+
+      The report runs to forty pages. It is stamped, and it goes into a steel cabinet in Washington. In October a polite man in a grey suit visits you and asks you to sign a paper. You sign it.
+
+      It is all on the record now. It is the safest place in the world to hide a thing.
+    extra:
+      - requires: {with: wren}
+        text: Wren is called to Washington three times to tell his story to men who write it down and thank him. The third time, they ask whether he has ever thought of retiring. He takes the hint.
+      - requires: {gone: wren}
+        text: "Professor Hollis Wren is not among the names the Navy finds. In the report he is a single line of type: *one (1) civilian, presumed lost under ice.*"
+      - requires: {broken: wren}
+        text: Wren is taken to a Navy hospital in Seattle, where he sings to the nurses. They are told not to listen to the words.
+      - requires: {with: mae}
+        text: Mae gives the Navy her sketchbook, all of it. They give her back the pages with birds on them.
+      - requires: {broken: mae}
+        text: Mae draws the eye for the Navy's doctors, over and over. They put the drawings in the file too.
+      - requires: {with: lund}
+        text: When the polite man in the grey suit comes to see Lund, Lund will not sign anything. Nothing whatever happens to him, and that frightens him more than anything has since the island.
+      - requires: {broken: lund}
+        text: Lund is put ashore at Unalaska, talking to his brother. Nobody from Washington ever comes to see him.
+      - requires: {note: JONAH}
+        text: Jonah Pruitt sails with you on the *Haida*. He is the only soul from Mercy the Navy ever finds, and they ask him questions for a month. He answers them by asking about oranges.
+      - requires: {investigator: reporter}
+        text: You write the whole thing up for the *Clarion*. Your editor reads it twice, takes a telephone call from Washington, and spikes it. Then he takes you to the best lunch you have ever eaten, and does not say why.
+
+  136:
+    title: Uncharted
+    ending: escape
+    text: |
+      You tell him about the reef, the *Kittiwake* and Captain Brandt, and nothing about the island. He listens, looking past you at the glacier, and he does not ask the question you can see in his face.
+
+      By noon you are all aboard, wrapped in Navy blankets and drinking coffee so strong it stands up in the cup. The *Haida* weighs anchor at dusk.
+
+      As the chain comes in, the singing begins up on the White. It comes thin and sweet across the water: *Rock of Ages*, with the wrong words. Every man on deck stops what he is doing. A boy at the rail crosses himself. The captain stands on his bridge with his hands behind his back until the island is gone in the fog. Then he goes below without a word.
+
+      You see his log, later. He has written the date, the position, the weather, and *Picked up survivors of schooner Kittiwake.* Of an island, a village or a glacier, there is not one word.
+
+      He knows what he saw. So do you. Neither of you will ever say so.
+    extra:
+      - requires: {with: wren}
+        text: Professor Wren sleeps for two days. When he wakes, he asks for Halloway's journal, reads it through once more, and drops it over the side without a word.
+      - requires: {gone: wren}
+        text: Professor Hollis Wren is listed as lost at sea with the *Kittiwake*. That is what the captain writes, and you let him.
+      - requires: {broken: wren}
+        text: Wren sings to himself all the way to Unalaska. The sailors give him a cabin to himself, and do not go near it at night.
+      - requires: {with: mae}
+        text: Mae draws the *Haida*, the sailors, the gulls and the captain's saddle of a face. She does not draw the island. When you ask her why, she says she can't remember what it looked like, and you believe her.
+      - requires: {broken: mae}
+        text: Mae is carried aboard still drawing the same eye. The ship's doctor gives her something to make her sleep, and she draws in her sleep.
+      - requires: {with: lund}
+        text: Lund spends the voyage on deck, watching the sea astern. He never sails west of Kodiak again.
+      - requires: {broken: lund}
+        text: Lund is talking to his brother when they hand him up the side. The sailors give him plenty of room.
+      - requires: [{note: JONAH}, {no_note: ABOARD}]
+        text: Nobody asks Jonah Pruitt aboard, and he does not ask. When the launch pulls away he is still standing on the shingle with his bundle under his arm, watching the steel ship.
+      - requires: {note: ABOARD}
+        text: Jonah Pruitt rides most of the way to Unalaska in the *Haida*'s engine room, watching the pistons go round with tears running down his face. He goes on to Seattle, and eats an orange every day for a year.
+
   123:
     title: Mercy
     ending: triumph
     text: |
-      They come down off the White in the grey of morning, all forty-two of them, carrying their torches unlit. Nobody sings.
+      They come down off the White in the grey of morning, every soul in Mercy, carrying their torches unlit. Nobody sings.
 
       Below the ice, the Sleeper sleeps on. It does not need them. It never did. It sleeps as its great master sleeps in the drowned city far to the south, and it will sleep until the stars come right, which is not your concern and, please God, not your grandchildren's either. But it no longer dreams on forty human voices. It has sunk away, down and down, into a sleep without singers.
 
@@ -2571,6 +3232,20 @@ sections:
 
       The *Kittiwake* and all who sailed in her are posted missing at Lloyd's on the 9th of September, 1926.
 
+  161:
+    title: In Its Wake
+    ending: lost
+    text: |
+      You turn the bow west, and follow it.
+
+      You could not have said why, then or ever. Only that the shadow under the sea was going somewhere. Everything you saw on the island was a door, and the shadow is the thing behind the door, and you have come too far to stop on the threshold. Nobody in the boat says a word against it. Perhaps they want to see it too.
+
+      For two days you follow a darkness in the water that never surfaces and never quite leaves you. Seals come up round the boat in their hundreds, all swimming west. Birds go over in long, silent skeins, all flying west. On the second night the sea begins to glow faintly green from far below, and it is warm when you trail your hand in it.
+
+      On the third morning the water ahead goes perfectly flat, flat as a millpond for miles. Out of the middle of the flatness, very slowly, rises the top of a great carved stone, green and streaming, cut on every face with curling, clotted signs.
+
+      The stars are not right. Not yet. But you are early, and you have a very good seat.
+
   132:
     title: The Padlock
     text: |
@@ -2587,7 +3262,7 @@ sections:
     title: The Long Winter
     ending: lost
     text: |
-      They take you back up the lane to the cooper's house. They do not hurt you. They do not need to.
+      They take you back up the lane to a turf house at the end of it, and bar the door. They do not hurt you. They do not need to.
 
       No ship comes that autumn. No ship comes at all.
 
@@ -2606,7 +3281,7 @@ sections:
 
       Your name is added to the list of those lost with the schooner *Kittiwake*, July 1926, in the western Aleutians. Nobody ever finds your body.
 
-      On Mercy Island, the people of the Landing carry you up to the White with hymns, and lay you in the ice, where the cold keeps everything, and where the Sleeper can hear you not singing, forever.
+      The sea keeps what it takes, and so does the White. Somewhere under the fog, the Sleeper can hear you not singing, forever.
 
   130:
     title: The Sanatorium
