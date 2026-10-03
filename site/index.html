@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Call of Cthulhu Solo</title>
+  <meta name="description" content="Solo gamebooks in the style of the Call of Cthulhu RPG: d100 skill rolls, Sanity, Luck and companions who can break."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="gb">
+  <main class="gb-main">
+    <header class="gb-masthead">
+      <p class="gb-kicker">Solo investigations // d100</p>
+      <h1>Call of Cthulhu Solo</h1>
+      <p>Read numbered sections, make choices, and roll your investigator's skills against the dark. Keep your companions sane, keep what you find, and mind the words in your journal.</p>
+    </header>
+
+    <div id="gb-app" class="gb-app" data-index="adventures/index.yaml">
+      <p class="gb-loading" role="status">Unrolling the charts&hellip;</p>
+    </div>
+
+    <dialog id="gb-source" class="gb-source" aria-labelledby="gb-source-title">
+      <div class="gb-source-head">
+        <h2 id="gb-source-title" class="gb-deco">The adventure file</h2>
+        <button type="button" class="gb-btn gb-btn-small" data-close>Close</button>
+      </div>
+      <p class="gb-source-note">The whole adventure is one YAML file: investigators, companions, items, journal words and every numbered section. Read only.</p>
+      <pre id="gb-source-text" class="gb-source-text" tabindex="0" role="region" aria-label="Adventure file text"></pre>
+    </dialog>
+  </main>
+  <footer class="gb-footer">An unofficial fan engine. Rules in the spirit of Call of Cthulhu 7th edition; all story text is original.</footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

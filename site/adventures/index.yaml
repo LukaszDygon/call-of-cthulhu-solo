@@ -1,0 +1,3 @@
+# Adventures listed on the cover screen, in order. Add a file here to publish a new adventure.
+adventures:
+  - file: mercy-island.yaml

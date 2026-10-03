@@ -1,0 +1,109 @@
+# The smallest adventure that passes every check. Tests break it one way at a time.
+title: Tiny Test
+start: 1
+on_death: 8
+on_madness: 9
+skills:
+  Spot Hidden: 25
+  Listen: 20
+  Climb: 20
+  Stealth: 20
+investigators:
+  - id: a
+    occupation: Tester
+    name: Ada Tester
+    age: 30
+    bio: Tests things.
+    characteristics: {STR: 50, CON: 50, SIZ: 50, DEX: 50, APP: 50, INT: 50, POW: 50, EDU: 50}
+    hp: 10
+    san: 50
+    luck: 50
+    skills: {Spot Hidden: 60, Listen: 60, Climb: 60}
+    kit: [lamp]
+  - id: b
+    occupation: Checker
+    name: Bo Checker
+    age: 40
+    bio: Checks things.
+    characteristics: {STR: 50, CON: 60, SIZ: 50, DEX: 50, APP: 50, INT: 50, POW: 50, EDU: 50}
+    hp: 11
+    san: 50
+    luck: 50
+    skills: {Spot Hidden: 50, Listen: 50, Climb: 50, Stealth: 50}
+companions:
+  - id: pal
+    name: Pal Companion
+    short: Pal
+    role: A friend.
+    san: 10
+    breaks: Pal stares at the wall.
+items:
+  lamp: {name: Lamp, text: A lamp.}
+  key: {name: Key, text: A key.}
+journal:
+  SEEN: You saw it.
+sections:
+  1:
+    title: Start
+    text: You stand at the start.
+    choices:
+      - text: "Look around."
+        roll: {skill: Spot Hidden, success: 2, failure: 3}
+      - text: "Listen."
+        roll: {skill: Listen, success: 3, failure: 2}
+  2:
+    title: Found
+    effects:
+      - gain: key
+      - note: SEEN
+      - companion: pal
+        san: "1/1D3"
+    text: You find a key.
+    choices:
+      - text: "Climb on."
+        roll: {skill: Climb, success: 4, failure: 5}
+  3:
+    title: Missed
+    text: You find nothing.
+    choices:
+      - text: "Go on."
+        to: 4
+  4:
+    title: The Door
+    text: A door.
+    choices:
+      - text: "Unlock it."
+        requires: {item: key}
+        to: 6
+      - text: "Light the lamp and look for another way."
+        requires: {item: lamp}
+        to: 7
+      - text: "Remember what you saw."
+        requires: {note: SEEN}
+        to: 6
+      - text: "Force it."
+        to: 7
+  5:
+    title: The Fall
+    effects:
+      - hp: "-1D3"
+    text: You fall.
+    choices:
+      - text: "Get up."
+        to: 4
+  6:
+    title: Through
+    ending: triumph
+    text: You are through.
+  7:
+    title: Round About
+    ending: escape
+    text: You find another way.
+  8:
+    title: Dead
+    ending: death
+    text: You die.
+  9:
+    title: Mad
+    ending: madness
+    text: You go mad.

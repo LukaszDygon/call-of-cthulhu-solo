@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[oc]
+/build/
+/dist/
+*.egg-info
+.venv
+.pytest_cache/
+.ruff_cache/
+
+# Story drafts with named sections; the numbered file in site/adventures/ is the source of truth
+/drafts/
+
+# Browser smoke-test profile and screenshots
+/tools/.smoke/
+
+# Claude Code local state
+.claude/settings.local.json
+
+# Secrets
+.env
+.env.*
