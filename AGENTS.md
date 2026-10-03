@@ -20,6 +20,7 @@ uv run pytest -q                                         # tests (run after ever
 uv run ruff check . && uv run ruff format .              # lint and format
 uv run gamebook check site/adventures/<slug>.yaml        # structure: links, reachability, hooks, fair rolls
 uv run gamebook stats site/adventures/<slug>.yaml        # simulated playthroughs vs the story's `targets:`
+uv run gamebook choices site/adventures/<slug>.yaml      # which decisions change something, and which are cosmetic
 uv run gamebook edges site/adventures/<slug>.yaml        # every way into each section, for continuity work
 uv run gamebook assemble drafts/<slug>/ -o site/adventures/<slug>.yaml
 node tools/smoke.mjs http://127.0.0.1:8000/              # headless Chrome playthroughs (server must be running)
@@ -35,18 +36,20 @@ node tools/smoke.mjs http://127.0.0.1:8000/              # headless Chrome playt
 | `gamebook/adventure.py` | Strict loader (duplicate keys fail) and helpers to walk sections, links and state |
 | `gamebook/checks.py` | Structural checks |
 | `gamebook/simulate.py` | Random playthroughs mirroring the engine's rules, and `targets:` |
+| `gamebook/variety.py` | Classifies each decision (fork, detour, flavour, cosmetic) and finds bottlenecks |
 | `gamebook/assemble.py` | Named-section drafts to a numbered file |
 | `gamebook/cli.py` | The `gamebook` command |
 | `tests/` | The checker against `fixtures/tiny.yaml`, and every published adventure against its targets |
 | `docs/adventure-format.md` | The YAML format |
 | `docs/story-craft.md` | How to write stories that hold together; the brief for every story skill and agent |
-| `.claude/skills/` | `new-story`, `verify-story` |
+| `.claude/skills/` | `new-story`, `new-path`, `verify-story` |
 | `.claude/agents/continuity-auditor.md` | Read-only, edge-by-edge continuity audit |
 | `.claude/rules/adventures.md` | Writing rules, loaded when touching adventures |
 
 ## Workflow for stories
 
-1. `/new-story`: interview, bible, section map, drafts, assemble, check.
+1. `/new-story`: interview, bible, section map, drafts, assemble, check. To grow an existing story, `/new-path`
+   adds a side quest or a quick ending.
 2. `/verify-story`: automated checks, a two-pass continuity audit with fixes, a smoke test.
 3. A human playtest. Fix what it finds with `/verify-story` again.
 
@@ -61,7 +64,7 @@ node tools/smoke.mjs http://127.0.0.1:8000/              # headless Chrome playt
 
 ## Do not
 
-- Copy Chaosium text, or make a real people the cult (`docs/story-craft.md` §7).
+- Copy Chaosium text, or make a real people the cult (`docs/story-craft.md` §8).
 - Add dependencies without asking.
 - Commit `drafts/`. It's scratch space; the numbered file in `site/adventures/` is the source of truth.
 - Push unless the user asks.

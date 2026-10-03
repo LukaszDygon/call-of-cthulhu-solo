@@ -2,21 +2,25 @@
 
 How to write a branching solo adventure that reads as one continuous story on every path.
 
-These lessons come from writing *Fog Over Mercy Island* (133 sections). A playtester read about 20% of it and
-reported six seams. Two full audits of every link then found 63 more, including bugs that the first round of fixes
-introduced. The skills (`/new-story`, `/verify-story`) and the `continuity-auditor` agent all work from this
-document.
+These lessons come from writing *Fog Over Mercy Island*. A playtester read about 20% of its first draft (133
+sections) and reported six seams. Two full audits of every link then found 63 more, including bugs that the first
+round of fixes introduced. A later playtest found two more problems: a rescuer who doubted an island he had just
+steered toward, and choices that all led the same way. The rework added side quests and quick endings (161
+sections, 18 endings). The skills (`/new-story`, `/new-path`, `/verify-story`) and the `continuity-auditor` agent
+all work from this document.
 
 ## 1. Shape
 
-- **Size:** about 120-140 sections, with an average playthrough of 20-30 sections. Paths branch and then
-  reconverge. Set these as `targets:` so they are tested.
+- **Size:** about 120-140 sections for the main line, with an average playthrough of 20-30 sections. Side quests
+  and quick endings (ยง2) can take it to 150-180. Paths branch and then reconverge. Set these as `targets:` so they
+  are tested.
 - **Rhythm:** about 30% short beats under 60 words (fight turns, roll outcomes, transitions). Add 5-8 long set
   pieces of 250-500 words, where a new place is described or a whole conversation happens. The rest sit around
   80-200 words.
 - **Acts and hubs:** each act opens at a convergence section. Inside an act, offer 2-3 routes. A "night" hub
-  where the reader picks one activity is a cheap way to add variety.
-- **Endings:** 6-10. Include at least:
+  where the reader picks one activity is a cheap way to add variety. A hub must never be a bottleneck that every
+  playthrough walks through: give each act a route around it (ยง2).
+- **Endings:** 6-10 main endings, plus the quick endings off the side branches (ยง2). Include at least:
   - a triumph earned through a long-range payoff
   - a plain escape
   - a bittersweet ending
@@ -24,9 +28,43 @@ document.
   - a lost ending
   - `on_death` and `on_madness`
 - **Random runs are not players.** Triumphs can be rare in `gamebook stats` as long as a purposeful reader can
-  reach them.
+  reach them. Quick endings can be common in simulation for the same reason: a random reader takes every
+  reckless option a real one would think twice about.
 
-## 2. Investigators and fair rolls
+## 2. Choices that matter
+
+A reader who feels that every choice leads to the same place stops believing in the choices. The first draft of
+Mercy Island had nine endings, all of them in Act Four, and every playthrough walked through the same seven scenes
+to get there. Its decisions changed a journal word here and there, then rejoined the main path one section later.
+
+- **Every decision changes something.** Each option must differ from the others in at least one of:
+  - where it leads: a different scene, a side quest or an ending
+  - what it leaves behind: a journal word, an item or a companion's state that something later checks
+  - what it risks: a different roll, cost or danger
+
+  Options that lead to the same scenes and leave the same state are **cosmetic**. `gamebook choices` lists them,
+  and the `cosmetic_choices` target (0.1 is a good default) fails the tests when there are too many.
+- **Approaches are not decisions.** "Grab the rope" (STR) or "Call down to him" (Charm) lets each investigator
+  play to their strengths, and that's good. But two approaches to the same outcome are **twins**: a decision made
+  only of twins is cosmetic. Add an option that goes somewhere else ("Drop out of sight, and trail him home").
+- **A divergence takes one of two shapes:**
+  - **Side quest:** it leaves the main path for 2-6 sections somewhere new, then rejoins it **changed**. It
+    carries back a journal word, an item or a companion's state that pays off later. In Mercy Island, a night in
+    Halloway's hut can give the Closing Verse or the boathouse key. A sleepwalk toward the glowing glacier, fought
+    off, teaches the safe moraine path for Act Three.
+  - **Quick ending:** a very different ending, 1-3 sections from the choice. Make it **bizarre** (follow the
+    footprints into the sea, and find a drowned church with Captain Brandt in the third row) or **wonderful**
+    (slip through the reef by night with Jonah, before the tithe). When the reader was reckless, make it
+    **scolding**: the narrator says plainly what they did wrong ("He asked you how many bullets you had. It was a
+    fair question."). An early escape can scold too: "You found it. You left it before breakfast."
+- **Every act needs both.** At least one quick ending or route that skips the act's hub, and at least one side
+  quest. `gamebook choices` prints the sections every playthrough passes through: keep that list to the opening.
+- **Offer a way back.** A side branch can offer the main path again ("Let him win. Turn inland after all"), so a
+  reader who strays is not punished for curiosity.
+- **Quick endings still need a proper ending.** Write them as carefully as the main ones, with a closing line that
+  lands, and handle the companions who may be present.
+
+## 3. Investigators and fair rolls
 
 - Build 4-6 archetypes **for this scenario**. Each persona's skills fit who they are. Each needs at least three
   trained skills (40%+) that the story actually rolls.
@@ -42,7 +80,7 @@ document.
   - the guide's dynamite can seal the cave
 - Every starting kit item should matter later.
 
-## 3. Every hook pays off
+## 4. Every hook pays off
 
 - Every journal word that is noted must be checked somewhere, by a choice or an extra. Every item must be
   required somewhere or give a bonus. `gamebook check` warns about both.
@@ -59,7 +97,7 @@ document.
 - A section's own `effects` apply before its extras and choices. Never gate something in a section on state that
   the same section sets.
 
-## 4. Continuity across every edge
+## 5. Continuity across every edge
 
 The reader walks one path, but you are writing a graph. Read each edge (choice โ’ target) as continuous prose.
 `gamebook edges` lists every way into a section and the state that may already be set on arrival.
@@ -78,6 +116,11 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
   `extra`. Use `before: true` when the line must come first.
 - **Antecedents.** "She is the cutter *Haida*" fails on a path where no ship has appeared. Endings are reached
   from many places, so check them hardest.
+- **Who saw what.** A character's knowledge and reactions must fit what they witnessed **on that path**. A cutter
+  captain who picks up a boat at sea can doubt there was ever an island. The same captain, steering toward flares
+  fired from the island's own headland, cannot. For every ending and rescue, ask where the reader physically is
+  (on the island, at sea, bound, alone) and how they were found. When the answers differ, write separate scenes,
+  or neutral text with extras.
 - **Choices keep their promises.** "Call it murder, to her face" must lead to a confrontation, not a gentle plea.
 - **No game logic in prose.** Not "in the dory, or a boat of their own if you had none". Split it into extras.
 - **Where is everyone?**
@@ -95,7 +138,7 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - **Repetition.** Look for the same phrase in a section's first and last paragraph, or the same idea in two
   extras.
 
-## 5. Facts and arithmetic
+## 6. Facts and arithmetic
 
 - Keep a bible table: every named character's age in the story year, birth year, relationships and key dates.
   **Do the arithmetic.** An 80-year-old in 1926 cannot be the great-granddaughter of a captain who was an adult
@@ -104,7 +147,7 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - Fix the geography (the village north along the coast, the glacier inland), and make every route's text match it.
 - One bell, in one place.
 
-## 6. Sanity and danger
+## 7. Sanity and danger
 
 - **Investigator Sanity:**
   - unease: 0/1
@@ -116,7 +159,7 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
   write what a broken companion looks like in later sections and endings.
 - **Hit points:** falls and blades do 1D3-1D8. Death should be possible but rare, about 2-5% of random runs.
 
-## 7. Sensitivity and sources
+## 8. Sensitivity and sources
 
 - Don't cast real peoples as cultists, as Lovecraft often did with non-white and Indigenous cultures. Use invented
   or settler communities (Mercy Landing descends from a lost 1843 sealing colony). Give them understandable motives
@@ -124,7 +167,7 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - Lovecraft's stories, such as *The Call of Cthulhu* (1928), are public domain and can be quoted. Chaosium's
   scenario text is not. Paraphrase mechanics and write all story text new.
 
-## 8. Style
+## 9. Style
 
 - Vivid pulp, in the second person and present tense. Short sentences, with no run-ons. Use concrete sensory
   detail rather than piling up adjectives, and save words like "eldritch" and "cyclopean" for when they land.
@@ -132,14 +175,15 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - No emojis.
 - Choice text is one imperative line. In YAML, wrap it in double quotes and use single quotes inside.
 
-## 9. The process that worked
+## 10. The process that worked
 
 1. **Interview:** theme, setting, length, archetypes, tone, sensitivities.
 2. **Bible:** premise, backstory, a timeline with ages, the cast, places, an items and words table (set at / used
    at), the act outline and the endings.
 3. **Section map** with named ids and every edge, before any prose.
 4. **Draft act by act** in `drafts/<slug>/`, then `gamebook assemble`.
-5. **Automated checks:** `gamebook check` (no errors, no warnings) and `gamebook stats` (targets met).
+5. **Automated checks:** `gamebook check` (no errors, no warnings), `gamebook stats` (targets met) and
+   `gamebook choices` (no cosmetic decisions, no bottlenecks after the opening).
 6. **Continuity audit by a fresh reader** (the `continuity-auditor` agent) over every edge. Fix everything it
    finds.
 7. **Second audit pass by the same agent** to verify the fixes. On Mercy Island this found 18 more problems,
@@ -149,6 +193,9 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 ## Quick checklist
 
 - [ ] `gamebook check`: 0 errors, 0 warnings. `gamebook stats`: all targets met, no dead ends.
+- [ ] `gamebook choices`: no cosmetic decisions, and only the opening is shared by every playthrough. Each act has
+  a side quest that comes back changed and a quick ending (bizarre, wonderful or scolding).
+- [ ] Every character's reaction fits what they saw on that path. Every ending fits where the reader is.
 - [ ] Timeline and ages add up. Head counts and geography are consistent.
 - [ ] Each noted word and each item changes something later. Each character promise pays off.
 - [ ] Each convergence section reads right from every way in (`gamebook edges`).

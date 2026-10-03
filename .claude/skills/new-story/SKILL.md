@@ -1,6 +1,6 @@
 ---
 name: new-story
-description: Writes a new solo adventure from interview to a numbered, checked YAML file in site/adventures/. Covers the interview, the story bible (timeline, cast with ages, places, items and journal words with their payoffs), a named section map, drafting act by act, and assembly. It then hands over to /verify-story. Use when the user wants a new story or adventure.
+description: Writes a new solo adventure from interview to a numbered, checked YAML file in site/adventures/. Covers the interview, the story bible (timeline, cast with ages, places, items and journal words with their payoffs, and each act's side quests and quick endings), a named section map where every decision changes something, drafting act by act, and assembly. It then hands over to /verify-story. Use when the user wants a new story or adventure. To add a branch to an existing story, use /new-path instead.
 ---
 
 # New Story
@@ -17,7 +17,10 @@ and section style.
 
 - **The premise is the user's.** Ask; don't invent the theme, setting or antagonist. You may offer options marked
   as suggestions. Get approval for the bible and for the section map before writing prose.
-- Never copy Chaosium scenario text. Don't make a real people the cult (story-craft §7).
+- Never copy Chaosium scenario text. Don't make a real people the cult (story-craft §8).
+- **Choices must matter** (story-craft §2). No decision may be cosmetic. Every act gets at least one side quest
+  that rejoins the main path changed, and one quick ending that is bizarre, wonderful or, for reckless choices,
+  scolding.
 - Leave `site/app.js` alone. If the format truly can't express something, propose the engine change first. If it's
   approved, change `site/app.js`, `gamebook/simulate.py` and `docs/adventure-format.md` together.
 - Drafts live in `drafts/<slug>/`, which is git-ignored. After the first `/verify-story`, the numbered file is the
@@ -47,7 +50,12 @@ Re-ask only what is still unclear.
 - **Companions:** starting Sanity, what "broken" looks like, the first point where they can break.
 - **Items and journal words:** id, where set, where used, the payoff. Nothing without a payoff.
 - **Acts:** a time-of-day timeline for each act, its hubs and convergence points.
-- **Endings:** each one and how it is reached.
+- **Divergences:** for each act, its side quests (where they leave, what they carry back, where that pays off) and
+  its quick endings (the choice that leads there, and whether the ending is bizarre, wonderful or scolding). Give
+  each act a route around its hub, so no scene after the opening is one that every reader must see.
+- **Endings:** each one, how it is reached, and **where the reader is** when it happens (on the island, at sea,
+  captive). Write a separate ending, or extras, for each place: a rescuer reacts only to what they saw on that
+  path.
 
 Summarise the bible for the user and get approval.
 
@@ -57,23 +65,38 @@ One line per section, with named ids:
 `id | title | beat or set piece | exits (choice → target, success/failure) | sets | requires`
 
 Mark every **convergence section** (3+ ways in). For each one, note its incoming states and plan neutral main
-text plus `extra` lines. Estimate the average path and confirm every hook in the bible has its payoff edge. Show the
-user the act structure and get approval.
+text plus `extra` lines.
+
+Mark every **decision** (2+ options open together) with its kind, and what each option changes:
+- **fork:** an option can end the story differently
+- **side quest:** an option has its own route of 3+ sections before rejoining
+- **flavour:** the options rejoin quickly but leave different state that something later checks
+
+No option may be a twin of another unless the decision also offers somewhere else to go. A decision made only of
+twins is cosmetic: the choice changes nothing.
+
+Estimate the average path and confirm every hook in the bible has its payoff edge. Show the user the act structure,
+with its side quests and quick endings, and get approval.
 
 ### 4. Draft
 - `drafts/<slug>/1-header.yaml`: the top level and the `targets:` block, ending with `sections:`.
 - `drafts/<slug>/2-act-one.yaml`, `3-act-two.yaml` and so on: sections keyed by named id. Links use names
   (`to: the-reef`).
 - Write one act per pass. Before writing each section, list its ways in from the map, and write for all of them
-  (story-craft §4). Keep companion dialogue out of shared text once they can break.
+  (story-craft §5). Keep companion dialogue out of shared text once they can break.
 - Mix short beats with 5-8 long set pieces (story-craft §1).
+- Write quick endings with the same care as the main ones. A scolding ending names the reckless thing plainly, in
+  the narrator's voice ("He asked you how many bullets you had."). Handle the companions who may be present.
 
 ### 5. Assemble and check
 ```bash
 uv run gamebook assemble drafts/<slug>/ -o site/adventures/<slug>.yaml
 uv run gamebook check site/adventures/<slug>.yaml     # 0 errors, 0 warnings
 uv run gamebook stats site/adventures/<slug>.yaml     # all targets met, no dead ends
+uv run gamebook choices site/adventures/<slug>.yaml   # no cosmetic decisions; bottlenecks only in the opening
 ```
+- Put `cosmetic_choices: 0.1` in the `targets:` block, so the tests fail if decisions go cosmetic.
+- If `choices` lists a bottleneck after the opening, give that act a route around it.
 - Add `- file: <slug>.yaml` to `site/adventures/index.yaml`.
 - Iterate on the drafts and re-assemble until check and stats are clean. Then run `uv run pytest -q`.
 
