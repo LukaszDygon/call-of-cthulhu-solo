@@ -32,6 +32,7 @@ node tools/smoke.mjs http://127.0.0.1:8000/              # headless Chrome playt
 | :--- | :--- |
 | `site/app.js` | The engine: rolls, Sanity, Luck, companions, conditions, saving, full screen |
 | `site/style.css`, `site/index.html` | The 1920s campaign-book look and the page shell |
+| `site/favicon.svg` | The icon: a Choir torch. `favicon-32.png` and `apple-touch-icon.png` are rendered from it |
 | `site/adventures/` | `index.yaml` plus one YAML file per adventure |
 | `gamebook/adventure.py` | Strict loader (duplicate keys fail) and helpers to walk sections, links and state |
 | `gamebook/checks.py` | Structural checks |
