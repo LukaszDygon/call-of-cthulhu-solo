@@ -35,6 +35,9 @@ start: 1
 on_death: 129
 on_madness: 130
 
+fates:
+  lost: lost on the island
+
 bouts:
   - "You laugh, high and helpless, until your ribs ache."
   - "For a long moment you cannot remember your own name."

@@ -15,6 +15,7 @@ Keep this document, the engine and `gamebook/simulate.py` in step: they describe
 | `start` | First section number |
 | `on_death`, `on_madness` | Ending sections the engine jumps to when HP or Sanity reaches 0 |
 | `bouts` | Short lines picked at random for a bout of madness (losing 5+ Sanity at once) |
+| `fates` | Optional wording for each companion's fate at an ending, by status (below) |
 | `skills` | Base chance for every skill the story rolls (untrained value) |
 | `investigators` | The playable characters (below) |
 | `companions` | Non-player party members with their own Sanity (below) |
@@ -73,6 +74,14 @@ It also lists the sections every playthrough passes through.
 
 A companion's status is `with` (the default), `broken` (still there, but mad), `lost` or `dead`.
 At 0 Sanity the engine sets `broken`.
+
+An ending lists each companion's fate: *came through*, *broken in mind*, *lost* or *dead*. Reword any of them for
+your story with a top-level `fates:` map, keyed by status:
+
+```yaml
+fates:
+  lost: lost on the island
+```
 
 ## Sections
 

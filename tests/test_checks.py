@@ -94,3 +94,10 @@ def test_hit_points_follow_the_rules(tiny):
     broken = copy.deepcopy(tiny)
     broken["investigators"][0]["hp"] = 14
     assert any("hp 14 should be" in m for m in messages(broken, "warning"))
+
+
+def test_fates_must_name_companion_statuses(tiny):
+    tiny["fates"] = {"lost": "taken by the mist", "eaten": "eaten"}
+    found = messages(tiny, "error")
+    assert "top level: `fates` has unknown companion status 'eaten'" in found
+    assert not any("fates.lost" in m for m in found)

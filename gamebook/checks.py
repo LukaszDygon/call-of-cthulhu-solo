@@ -60,7 +60,13 @@ def _warn(where: str, message: str) -> Finding:
 
 def _top_level(adv: Adventure) -> list[Finding]:
     missing = [k for k in ("title", "start", "sections", "skills", "investigators") if not adv.get(k)]
-    return [_err("top level", f"missing `{k}`") for k in missing]
+    found = [_err("top level", f"missing `{k}`") for k in missing]
+    for status, label in (adv.get("fates") or {}).items():
+        if status not in STATUSES:
+            found.append(_err("top level", f"`fates` has unknown companion status {status!r}"))
+        elif not isinstance(label, str) or not label.strip():
+            found.append(_err("top level", f"`fates.{status}` must be some text"))
+    return found
 
 
 def _links(adv: Adventure) -> list[Finding]:

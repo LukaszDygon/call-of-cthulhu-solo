@@ -16,6 +16,8 @@
     triumph: 'Triumph', escape: 'Escape', bittersweet: 'Bittersweet', choir: 'Claimed',
     madness: 'Madness', death: 'Death', lost: 'Lost',
   };
+  // Companion fates shown at an ending; an adventure can reword them with a top-level `fates:` map.
+  const FATES = { with: 'came through', broken: 'broken in mind', lost: 'lost', dead: 'dead' };
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let catalogue = [];   // [{file, adventure, source}]
@@ -323,7 +325,7 @@
       <h3 class="gb-deco">How to play</h3>
       <p>Read each numbered section and choose what to do. Some choices call for a <strong>d100 roll</strong>: roll your skill or lower to succeed. Hard checks need half your skill, extreme ones a fifth.</p>
       <p>A failed roll can be bought back with <strong>Luck</strong>, point for point. Sanity cannot. Lose five or more Sanity at once and a bout of madness takes you.</p>
-      <p>Keep your companions sane, keep what you find, and mind the words you note in your journal. The island remembers.</p>
+      <p>Keep your companions sane, keep what you find, and mind the words you note in your journal. The story remembers.</p>
       <p>Once you are playing, press <strong>Full screen</strong> above the story: only the story scrolls, and your sheet stays in view.</p>
     </aside>`));
     root.append(wrap);
@@ -538,7 +540,7 @@
   function renderEnding(sec) {
     const fates = adv.companions.map((c) => {
       const s = state.companions[c.id];
-      const label = { with: 'came through', broken: 'broken in mind', lost: 'lost on the island', dead: 'dead' }[s.status];
+      const label = adv.fates?.[s.status] ?? FATES[s.status];
       return `<li><span>${esc(c.name)}</span><b>${label}</b></li>`;
     }).join('');
     const box = el(`<div class="gb-ending">
