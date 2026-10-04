@@ -60,10 +60,13 @@ for (let run = 0; run < runs; run++) {
   await ev('localStorage.clear()');
   await send('Page.reload');
   await waitFor('.gb-cover');
-  await ev(`document.querySelector('[data-act="begin"]').click()`);
+  // Cycle through every adventure on the cover, then through its investigators.
+  const covers = Math.max(await ev(`document.querySelectorAll('[data-act="begin"]').length`), 1);
+  const story = await ev(`document.querySelectorAll('.gb-cover-title')[${run % covers}]?.textContent`);
+  await ev(`document.querySelectorAll('[data-act="begin"]')[${run % covers}].click()`);
   await waitFor('.gb-inv');
   const investigators = await ev(`document.querySelectorAll('.gb-inv button').length`);
-  await ev(`document.querySelectorAll('.gb-inv button')[${run % Math.max(investigators, 1)}].click()`);
+  await ev(`document.querySelectorAll('.gb-inv button')[${Math.floor(run / covers) % Math.max(investigators, 1)}].click()`);
   await waitFor('.gb-page');
   const path = [];
   for (let step = 0; step < 150; step++) {
@@ -80,13 +83,13 @@ for (let run = 0; run < runs; run++) {
     }
     await sleep(60);
   }
-  results.push({ run, sections: path.length, ending: await ev(`document.querySelector('.gb-ending') ? document.querySelector('.gb-sec-title').textContent : null`) });
+  results.push({ run, story, sections: path.length, ending: await ev(`document.querySelector('.gb-ending') ? document.querySelector('.gb-sec-title').textContent : null`) });
 }
 
 clearTimeout(watchdog);
 ws.close();
 chrome.kill();
-for (const r of results) console.log(`run ${r.run + 1}: ${r.sections} sections -> ${r.ending ?? 'NO ENDING'}`);
+for (const r of results) console.log(`run ${r.run + 1} (${r.story}): ${r.sections} sections -> ${r.ending ?? 'NO ENDING'}`);
 for (const e of errors) console.log(`ERROR ${e}`);
 const failed = errors.length > 0 || results.some((r) => !r.ending);
 console.log(failed ? 'SMOKE FAILED' : 'smoke ok');
