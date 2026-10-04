@@ -43,6 +43,7 @@ node tools/smoke.mjs http://127.0.0.1:8000/              # headless Chrome playt
 | `tests/` | The checker against `fixtures/tiny.yaml`, and every published adventure against its targets |
 | `docs/adventure-format.md` | The YAML format |
 | `docs/story-craft.md` | How to write stories that hold together; the brief for every story skill and agent |
+| `docs/story-log.md` | Author decisions per story that the checks or the craft guide would otherwise flag |
 | `.claude/skills/` | `new-story`, `new-path`, `verify-story` |
 | `.claude/agents/continuity-auditor.md` | Read-only, edge-by-edge continuity audit |
 | `.claude/rules/adventures.md` | Writing rules, loaded when touching adventures |
