@@ -7,6 +7,7 @@ import pytest
 
 from gamebook import adventure as A
 from gamebook.checks import check, errors
+from gamebook.simulate import simulate
 
 TINY = Path(__file__).parent / "fixtures" / "tiny.yaml"
 
@@ -109,3 +110,13 @@ def test_fates_must_name_companion_statuses(tiny):
     found = messages(tiny, "error")
     assert "top level: `fates` has unknown companion status 'eaten'" in found
     assert not any("fates.lost" in m for m in found)
+
+
+def test_a_solo_story_needs_no_companions(tiny):
+    del tiny["companions"]
+    for sec in tiny["sections"].values():
+        sec["effects"] = [e for e in sec.get("effects") or [] if "companion" not in e]
+    assert messages(tiny, "error") == []
+    stats = simulate(tiny, runs_per_investigator=50)
+    assert not stats.dead_ends
+    assert stats.companion_break == 0

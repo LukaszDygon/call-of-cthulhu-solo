@@ -325,14 +325,15 @@
       <h3 class="gb-deco">How to play</h3>
       <p>Read each numbered section and choose what to do. Some choices call for a <strong>d100 roll</strong>: roll your skill or lower to succeed. Hard checks need half your skill, extreme ones a fifth.</p>
       <p>A failed roll can be bought back with <strong>Luck</strong>, point for point. Sanity cannot. Lose five or more Sanity at once and a bout of madness takes you.</p>
-      <p>Keep your companions sane, keep what you find, and mind the words you note in your journal. The story remembers.</p>
+      <p>Keep your wits, and your companions' if you have any. Keep what you find, and mind the words you note in your journal. The story remembers.</p>
       <p>Once you are playing, press <strong>Full screen</strong> above the story: only the story scrolls, and your sheet stays in view.</p>
     </aside>`));
     root.append(wrap);
     if (focus) wrap.querySelector('.gb-cover-title').focus();
   }
 
-  function use(entry) { adv = entry.adventure; advSource = entry.source; }
+  // A solo story may leave out `companions`; everything below can then treat it as an empty party.
+  function use(entry) { adv = entry.adventure; adv.companions ??= []; advSource = entry.source; }
 
   function renderInvestigators() {
     applyImmersive(false);
@@ -545,7 +546,7 @@
     }).join('');
     const box = el(`<div class="gb-ending">
       <p class="gb-ending-stamp">The End</p>
-      <ul class="gb-fates" role="list">${fates}</ul>
+      ${fates ? `<ul class="gb-fates" role="list">${fates}</ul>` : ''}
       <p class="gb-ending-count">You read ${state.log.length} of ${Object.keys(adv.sections).length} sections. Every other path is still out there in the fog.</p>
       <div class="gb-actions">
         <button type="button" class="gb-btn gb-btn-primary" data-act="again">Play again</button>
@@ -596,7 +597,7 @@
               <li class="gb-skill-base"><span>Dodge</span><b>${skillValue('Dodge')}%</b></li></ul>`)}
           </div>
           <div class="gb-sheet-b">
-            ${block('gb-block-party', 'Your party', `<ul class="gb-party" role="list">${party}</ul>`)}
+            ${party ? block('gb-block-party', 'Your party', `<ul class="gb-party" role="list">${party}</ul>`) : ''}
             ${block('gb-block-items', 'Possessions', `<ul class="gb-items" role="list">${state.items.map((i) => `<li><strong>${esc(itemName(i))}</strong><span>${esc(adv.items?.[i]?.text ?? '')}</span></li>`).join('') || '<li class="gb-empty">Nothing but wet clothes.</li>'}</ul>`)}
             ${block('gb-block-journal', 'Journal', `<ul class="gb-notes" role="list">${state.notes.map((n) => `<li><strong>${esc(n)}</strong><span>${esc(adv.journal?.[n] ?? '')}</span></li>`).join('') || '<li class="gb-empty">No words noted yet.</li>'}</ul>`)}
             <p class="gb-sheet-foot gb-block-foot">Sections read: ${state.log.length}</p>

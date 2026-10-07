@@ -18,7 +18,7 @@ Keep this document, the engine and `gamebook/simulate.py` in step: they describe
 | `fates` | Optional wording for each companion's fate at an ending, by status (below) |
 | `skills` | Base chance for every skill the story rolls (untrained value) |
 | `investigators` | The playable characters (below) |
-| `companions` | Non-player party members with their own Sanity (below) |
+| `companions` | Non-player party members with their own Sanity (below). Optional: leave it out for a solo story |
 | `items` | `id: {name, text, bonus: [skills]}`. `bonus` grants a bonus die on those skills while carried |
 | `journal` | `WORD: text`. Words the reader notes, shown with their text in the journal |
 | `sections` | Numbered sections (below) |
@@ -71,6 +71,8 @@ It also lists the sections every playthrough passes through.
   san: 18             # low on purpose: companions should be able to break
   breaks: What the reader sees when this companion's Sanity hits 0.
 ```
+
+A story with no companions leaves the key out. The sheet then shows no party, and endings list no fates.
 
 A companion's status is `with` (the default), `broken` (still there, but mad), `lost` or `dead`.
 At 0 Sanity the engine sets `broken`.
