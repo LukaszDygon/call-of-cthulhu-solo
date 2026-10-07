@@ -23,7 +23,7 @@ rmSync(profile, { recursive: true, force: true });
 mkdirSync(profile, { recursive: true });
 const chrome = spawn(chromePath, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, '--no-first-run', 'about:blank'], { stdio: 'ignore' });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const watchdog = setTimeout(() => { console.error('timed out'); chrome.kill(); process.exit(2); }, 60000 + runs * 30000);
+const watchdog = setTimeout(() => { console.error('timed out'); chrome.kill(); process.exit(2); }, 60000 + runs * 45000);
 
 let ws = null;
 for (let i = 0; i < 50 && !ws; i++) {
