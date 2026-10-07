@@ -6,8 +6,15 @@ These lessons come from writing *Fog Over Mercy Island*. A playtester read about
 sections) and reported six seams. Two full audits of every link then found 63 more, including bugs that the first
 round of fixes introduced. A later playtest found two more problems: a rescuer who doubted an island he had just
 steered toward, and choices that all led the same way. The rework added side quests and quick endings (161
-sections, 18 endings). The skills (`/new-story`, `/new-path`, `/verify-story`) and the `continuity-auditor` agent
-all work from this document.
+sections, 18 endings).
+
+*A Fistful of Cows* (220 sections) added an open-world day (ยง1) and the last lesson in ยง4. Three audit passes
+passed it, then a human playtester found work that never paid off where they reached for it: a confession nobody
+would act on, a key that opened nothing until the final night, and a charm that only helped if a roll failed.
+Every one of those hooks technically had a payoff.
+
+The skills (`/new-story`, `/new-path`, `/verify-story`) and the `continuity-auditor` agent all work from this
+document. Deliberate exceptions for one story go in `docs/story-log.md`.
 
 ## 1. Shape
 
@@ -20,6 +27,10 @@ all work from this document.
 - **Acts and hubs:** each act opens at a convergence section. Inside an act, offer 2-3 routes. A "night" hub
   where the reader picks one activity is a cheap way to add variety. A hub must never be a bottleneck that every
   playthrough walks through: give each act a route around it (ยง2).
+- **Open-world days.** A town the reader can tour in any order makes a good investigation day. Use journal words
+  as a clock (`NOON`, `LATE`): each hub sets the next word, and every place reachable at more than one hour gets
+  paired exits gated on them. Keep the text of those places neutral about the hour, and clear the words at dusk.
+  Make lingering cost something: two visits are safe, and a third means driving home in the dark.
 - **Endings:** 6-10 main endings, plus the quick endings off the side branches (ยง2). Include at least:
   - a triumph earned through a long-range payoff
   - a plain escape
@@ -60,7 +71,9 @@ to get there. Its decisions changed a journal word here and there, then rejoined
 - **Every act needs both.** At least one quick ending or route that skips the act's hub, and at least one side
   quest. `gamebook choices` prints the sections every playthrough passes through: keep that list to the opening.
 - **Offer a way back.** A side branch can offer the main path again ("Let him win. Turn inland after all"), so a
-  reader who strays is not punished for curiosity.
+  reader who strays is not punished for curiosity. It also keeps the simulation honest: a reckless quick ending one
+  click from a busy hub swamps the ending spread and drags the average path down. Give it a second step with a way
+  out ("Tear up the receipt, and walk away").
 - **Quick endings still need a proper ending.** Write them as carefully as the main ones, with a closing line that
   lands, and handle the companions who may be present.
 
@@ -94,8 +107,18 @@ to get there. Its decisions changed a journal word here and there, then rejoined
   into the climax must take him. That includes the path where the reader spent the day locked in an ice-house.
 - **States must change behaviour downstream.** If the leader *releases* the party, nobody should chase them to the
   boats afterwards.
+- **Pay off where the reader reaches for it.** Ask where a reader would *try* to use each thing they worked for,
+  not just where you planned its payoff, and make each of those places work or say why it can't.
+  - Evidence of a lie should stop what the lie set in motion. Show the gendarme the confession, and the false
+    complaint is dealt with. Hold it at the climax, and the condemnation should not happen.
+  - A key should open its lock as soon as the reader holds it, not only on the final night.
+  - A charm given against a danger should work wherever that danger is met, not only after a failed roll.
+- **One word, one meaning.** If a word is set in several places, every one must earn what its payoffs assume. If
+  the climax says "she promised", every section that notes the word must show the promise.
 - A section's own `effects` apply before its extras and choices. Never gate something in a section on state that
-  the same section sets.
+  the same section sets or clears (`note`, `unnote`, `gain`, `lose`; `gamebook check` warns). To change state on the
+  way out, put the effect on the exit choices instead. A companion Sanity hit in a section's own effects can break
+  someone before that section's `broken:` extras are read.
 
 ## 5. Continuity across every edge
 
@@ -134,7 +157,9 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
   after the first point where they can break. Gate those lines with `with:` / `broken:` extras, or attribute them
   neutrally ("somebody whispers", or the investigator says it).
 - **Extras render in list order.** Read each section with its worst combination of extras switched on. A line
-  that closes a scene ("What do we do?") must come last.
+  that closes a scene ("What do we do?") must come last. In any section with extras, and in every ending, put the
+  closing line in a final always-on extra (one with no `requires`), so that no path-specific line can land after
+  it.
 - **Repetition.** Look for the same phrase in a section's first and last paragraph, or the same idea in two
   extras.
 
@@ -143,7 +168,10 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - Keep a bible table: every named character's age in the story year, birth year, relationships and key dates.
   **Do the arithmetic.** An 80-year-old in 1926 cannot be the great-granddaughter of a captain who was an adult
   in 1843. A man of 60 in 1926 was 15 in 1881.
-- Count heads: "four survivors out of five" must match who was aboard.
+- Count heads: "four survivors out of five" must match who was aboard. Count within a scene too: if one cow of
+  fourteen is on the roof, thirteen stand in the ring.
+- Picture every set piece. Cows standing nose to tail in a ring cannot all face inward.
+- The narrator's claims are facts too. "Nobody will tell you why" is false once a character tells you.
 - Fix the geography (the village north along the coast, the glacier inland), and make every route's text match it.
 - One bell, in one place.
 
@@ -156,7 +184,8 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
   - Losing 5+ at once is a bout of madness.
 - **Companions:** start them at 15-20 Sanity, so one breaks in roughly a third of the runs that reach the climax.
   Give the reader ways to steady them: rest, brandy, Psychology. Track it with the `companion_break` target, and
-  write what a broken companion looks like in later sections and endings.
+  write what a broken companion looks like in later sections and endings. Work out the first point each companion
+  can break from the harshest path, and work it out again after tuning Sanity for the target: tuning moves it.
 - **Hit points:** falls and blades do 1D3-1D8. Death should be possible but rare, about 2-5% of random runs.
 
 ## 8. Sensitivity and sources
@@ -188,7 +217,9 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
    finds.
 7. **Second audit pass by the same agent** to verify the fixes. On Mercy Island this found 18 more problems,
    several introduced by the first round of fixes.
-8. **Browser smoke test** (`node tools/smoke.mjs`), then a human playtest.
+8. **Browser smoke test** (`node tools/smoke.mjs`), then a human playtest. Playtesters find what audits miss,
+   above all effort that never pays off (ยง4). Fix what they find, then audit the changed sections again.
+9. **Record the author's exceptions** to this guide in `docs/story-log.md`, so later audits don't undo them.
 
 ## Quick checklist
 
@@ -198,6 +229,8 @@ The reader walks one path, but you are writing a graph. Read each edge (choice โ
 - [ ] Every character's reaction fits what they saw on that path. Every ending fits where the reader is.
 - [ ] Timeline and ages add up. Head counts and geography are consistent.
 - [ ] Each noted word and each item changes something later. Each character promise pays off.
+- [ ] Everything the reader works for works where they would reach for it, and the endings respect it.
+- [ ] Set pieces are physically possible, and their counts agree.
 - [ ] Each convergence section reads right from every way in (`gamebook edges`).
 - [ ] No place, person or object is named before every path has introduced it.
 - [ ] Time of day is continuous across every edge.

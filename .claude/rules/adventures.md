@@ -22,11 +22,18 @@ rules people break most often:
 - **Time is continuous.** A choice that ends a day says so. Never repeat or skip a night.
 - **Introduce before naming.** No place, person or object appears in a choice or text before every path to it has
   met it.
-- **Every hook pays off.** Each journal word and item is used later. Each character promise gets its scene.
+- **Every hook pays off,** where the reader would reach for it. Each journal word and item is used later. Evidence
+  goes to the authority it concerns, a key opens its lock when you have it, and endings respect what the reader
+  holds. Each character promise gets its scene.
 - **Respect state.** Plot-critical status changes happen on every path. Bound people can't act. Released isn't fled.
   Confiscated items stay gone (`lose:`).
 - **Companions can break.** Late shared text doesn't give them lines. Gate those with `with:` / `broken:`.
-- **No condition on state that the same section's `effects` set:** effects apply first.
+- **No condition on state that the same section's `effects` set or clear:** effects apply first. Put a change you
+  need on the exit choices instead.
+- **Closing lines come last.** In a section with extras, and in every ending, put the last line in a final
+  always-on extra.
+- **YAML:** write any `text:` that contains `: ` as a block scalar (`text: |`). Keep one `extra:` key per section:
+  the loader refuses duplicates.
 - **Do the arithmetic** on ages and dates in the story year.
 - **Style:** pulp, second person, present tense, short sentences, no emojis. Choice text is one quoted imperative
   line.

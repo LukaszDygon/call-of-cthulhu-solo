@@ -16,7 +16,9 @@ Use Bash only to run `uv run gamebook check|stats|edges <file>` and read-only sh
 2. Run `uv run gamebook check <file>`, `uv run gamebook choices <file>` and `uv run gamebook edges <file>`. The
    edges report lists every way into each section, the busiest first, with the journal words, items and companion
    changes that may already be set on arrival. The choices report lists decisions that change nothing.
-3. Read the whole adventure file.
+3. Read the story's entry in `docs/story-log.md`, if it has one. Don't report departures from story-craft that the
+   author has accepted there.
+4. Read the whole adventure file.
 
 ## Method
 
@@ -41,11 +43,18 @@ Report anything a reader would trip over:
 - **Unshown actions:** text that refers back to something the reader never saw ("hands bloody from the door").
 - **Hooks without payoff:** a promise, a lingering detail or a journal word that nothing later uses. A choice
   whose wording promises what the target doesn't deliver.
+- **Wasted effort:** something the reader worked for that does nothing where they'd naturally reach for it.
+  Evidence that can't be shown to the authority it concerns. A key that can't open its lock until the climax. A
+  charm that only helps after a failed roll. An ending that ignores what the reader holds. These hooks all have a
+  payoff on paper, so check every place a reader would try to use each item and word.
+- **One word, two meanings:** a journal word set in several places, whose payoff assumes something only one of
+  those places showed.
 - **State:**
   - plot-critical status changes missing on some paths (a companion "taken" on one route but not another)
   - items used after they were confiscated or handed over without `lose:`
   - `released` versus `fled` not reflected downstream
-  - conditions that the section's own effects make always true or always false
+  - conditions that the section's own effects make always true or always false, including clears (`unnote`,
+    `lose`), and `broken:` extras for a companion whom that section's own Sanity hit can break
 - **Positions:** companions speaking after they were left behind or fell separately. Bound characters acting.
   An ally who walks with you but whom a route silently drops.
 - **Broken companions:** dialogue or actions in shared text after the point where a companion can break. Endings
@@ -53,7 +62,9 @@ Report anything a reader would trip over:
 - **Extras order:** a closing line followed by more lines. Two extras saying the same thing. Contradictory extras
   that can both show.
 - **Facts:** ages and generations that don't add up in the story year, head counts, geography, an object in two
-  places at once.
+  places at once. Counts within one scene (fourteen cows in the ring while one is on the roof). Set pieces that
+  can't physically happen (cows nose to tail, all facing inward). A narrator's claim that the story then breaks
+  ("Nobody will tell you why", before somebody does).
 - **Witnesses:** a character whose knowledge or reaction doesn't fit what they saw **on that path**. A rescuer
   who steered toward flares fired from the island can't doubt the island exists. Read every ending and rescue from
   each way in and ask where the reader physically is (on the island, at sea, bound, alone) and how they were found.

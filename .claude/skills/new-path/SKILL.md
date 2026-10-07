@@ -54,7 +54,8 @@ Write a short plan, and get the user's approval before writing prose:
 - **A way back:** a side branch can offer the main path again, so curiosity isn't punished.
 - **Plot-critical state:** if the main path later needs something to have happened (a companion taken, an item
   lost), the branch must make it happen too, or rejoin before it.
-- **New words and items:** each one with where it is set and where it pays off.
+- **New words and items:** each one with where it is set and where it pays off. Also list where a reader would
+  *try* to use it (story-craft §4), and make those places work too.
 - **Introductions:** every person, place or thing the branch names must be introduced on every path into it, or
   described instead of named.
 

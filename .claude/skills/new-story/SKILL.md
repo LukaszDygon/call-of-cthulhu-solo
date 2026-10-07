@@ -47,8 +47,11 @@ Re-ask only what is still unclear.
 - **Places:** fixed geography, and where each place is first introduced.
 - **Investigators:** a skills table plus a coverage matrix of rolled skills × archetypes. Every rolled skill
   must have 2+ trained archetypes, or be gated. Each archetype needs 3+ useful skills and one path of their own.
-- **Companions:** starting Sanity, what "broken" looks like, the first point where they can break.
-- **Items and journal words:** id, where set, where used, the payoff. Nothing without a payoff.
+- **Companions:** starting Sanity, what "broken" looks like, and the first point where they can break. Work that
+  point out from the harshest path, and again after you tune Sanity for the target.
+- **Items and journal words:** id, where set, where used, the payoff. Nothing without a payoff. Also list every
+  place a reader would *try* to use each one: showing the confession to the gendarme, taking the key to its lock,
+  wearing the charm into the danger. Each must work, or the text says why not (story-craft §4).
 - **Acts:** a time-of-day timeline for each act, its hubs and convergence points.
 - **Divergences:** for each act, its side quests (where they leave, what they carry back, where that pays off) and
   its quick endings (the choice that leads there, and whether the ending is bizarre, wonderful or scolding). Give
@@ -65,7 +68,8 @@ One line per section, with named ids:
 `id | title | beat or set piece | exits (choice → target, success/failure) | sets | requires`
 
 Mark every **convergence section** (3+ ways in). For each one, note its incoming states and plan neutral main
-text plus `extra` lines.
+text plus `extra` lines. Mark places reachable at more than one time of day (story-craft §1, open-world days):
+keep their text neutral about the hour, and pair their exits on the clock words.
 
 Mark every **decision** (2+ options open together) with its kind, and what each option changes:
 - **fork:** an option can end the story differently
@@ -85,6 +89,9 @@ with its side quests and quick endings, and get approval.
 - Write one act per pass. Before writing each section, list its ways in from the map, and write for all of them
   (story-craft §5). Keep companion dialogue out of shared text once they can break.
 - Mix short beats with 5-8 long set pieces (story-craft §1).
+- In any section with extras, and in every ending, put the closing line in a final always-on extra.
+- YAML: write any `text:` that contains `: ` as a block scalar (`text: |`), and keep one `extra:` key per section.
+  If the default companion fates (came through, broken in mind, lost, dead) don't fit, set `fates:` in the header.
 - Write quick endings with the same care as the main ones. A scolding ending names the reckless thing plainly, in
   the narrator's voice ("He asked you how many bullets you had."). Handle the companions who may be present.
 
@@ -99,9 +106,12 @@ uv run gamebook choices site/adventures/<slug>.yaml   # no cosmetic decisions; b
 - If `choices` lists a bottleneck after the opening, give that act a route around it.
 - Add `- file: <slug>.yaml` to `site/adventures/index.yaml`.
 - Iterate on the drafts and re-assemble until check and stats are clean. Then run `uv run pytest -q`.
+- The tests check `targets:` with 300 runs per investigator, while `stats` uses 400. Leave a margin (a section or
+  two of average path, a few points of companion breaks) so the tests don't fail at random.
 
 ### 6. Verify
 Run `/verify-story <slug>`. Don't call a story done before its continuity audit.
 
 ### 7. Report
-Report the section count, word count, average path, endings, the stats targets, and where to play it.
+Report the section count, word count, average path, endings, the stats targets, and where to play it. If the
+author accepts a departure from story-craft (rhythm, death rate, length), record it in `docs/story-log.md`.

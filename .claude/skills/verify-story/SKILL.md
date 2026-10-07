@@ -20,8 +20,12 @@ uv run gamebook stats site/adventures/<slug>.yaml
 uv run gamebook choices site/adventures/<slug>.yaml
 uv run pytest -q
 ```
+- Read the story's entry in `docs/story-log.md` first. It records departures from story-craft that the author
+  accepted. Don't "fix" those.
 - Fix every error. Fix warnings too, or tell the user why one stays. A "hook without a payoff" usually means a
   missing scene, not a word to delete.
+- The tests check `targets:` with 300 runs per investigator (`stats` uses 400). Keep a margin, or they will fail
+  at random.
 - If a target is missed, look at the rarest sections and the ending spread before changing numbers.
 - For each **cosmetic decision** that `choices` lists, give one option somewhere else to go: a side quest that
   comes back changed, or a quick ending (story-craft §2). If more than one or two fixes are needed, plan them with
@@ -42,6 +46,14 @@ Don't edit the file while the agent is reading it.
 Fix **every** finding in the numbered YAML. Small text changes are safest as a Python patch script of exact-match
 replacements that asserts each match count and reports any misses. That way a silent non-match can't slip
 through.
+- **Scope each replacement to its section.** Search from `  N:` to the next section key, so the same sentence in
+  another section can't be hit.
+- **Block-scalar extras** (`text: |`) have their words on the next line, indented 10 spaces. Match the words,
+  not `text: words`.
+- **State on the way out:** when a section must change state that its own extras read, put the `note`, `unnote`
+  or `lose` on its exit choices instead.
+- **Layout:** after reordering a section's extras, check that no `# ---` comment or blank line has moved into the
+  list.
 - **Bridging sections:** use the next free number, place them in the file beside the sections they join, and link
   them in.
 - **Path-specific lines:** put them in `extra`, with `before: true` when the line must come first. Order the extras
@@ -57,11 +69,17 @@ new journal words, engine or format changes) and ask for:
 
 Fix again. Stop when a pass finds nothing above LOW, or after three passes; then report what remains.
 
+If the auditor stops early (the machine slept, or it stalled), resume it with SendMessage and a short note. It
+keeps its map, so it doesn't have to start again.
+
 ### 5. Browser smoke test
 ```bash
 uv run python -m http.server 8000 -d site     # run in the background
-node tools/smoke.mjs http://127.0.0.1:8000/ --runs 6
+node tools/smoke.mjs http://127.0.0.1:8000/ --runs 8
 ```
+- If port 8000 is taken, serve on another port.
+- The smoke test plays every story on the cover in turn, then the next investigator. To cover all of this story's
+  investigators, set `--runs` to the number of stories times the number of investigators.
 - Expect no console errors and no dead ends. Stop the server afterwards.
 - If the sandbox refuses the port or Chrome, say so and give the user the commands to run.
 
@@ -72,4 +90,6 @@ Give:
 - the final `gamebook stats` and `gamebook choices` numbers
 - anything left open, and why
 
-Point the user at a human playtest next.
+Point the user at a human playtest next. Tell them to reload any open tab first, because an open page keeps the
+old story. Playtesters find what audits miss, above all effort that doesn't pay off where they reached for it
+(story-craft §4). Fix their findings, then run the auditor over the changed sections again.
