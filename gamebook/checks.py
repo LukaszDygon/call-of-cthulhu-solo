@@ -178,30 +178,36 @@ def _state(adv: Adventure) -> list[Finding]:
 
 def _self_conditions(adv: Adventure) -> list[Finding]:
     """A section's effects apply before its extras and choices are shown, so conditions on state the same
-    section sets are always true (or always false) there. That is almost always a mistake."""
+    section sets or clears are always true (or always false) there. That is almost always a mistake."""
     found = []
     for sid, sec in sections(adv).items():
-        sets_notes = {e["note"] for e in sec.get("effects") or [] if "note" in e}
-        sets_items = {e["gain"] for e in sec.get("effects") or [] if "gain" in e}
+        changes: dict[tuple[str, str], bool] = {}  # (note|item, id) -> set (True) or cleared (False)
+        for e in sec.get("effects") or []:
+            for key, kind, now in (
+                ("note", "note", True),
+                ("unnote", "note", False),
+                ("gain", "item", True),
+                ("lose", "item", False),
+            ):
+                if key in e:
+                    changes[(kind, e[key])] = now
         blocks = [("extra", x) for x in sec.get("extra") or []] + [
             ("choice", c) for c in sec.get("choices") or []
         ]
         for kind, block in blocks:
             for leaf in leaves(block.get("requires")):
-                for key, pool in (
-                    ("note", sets_notes),
-                    ("no_note", sets_notes),
-                    ("item", sets_items),
-                    ("no_item", sets_items),
-                ):
-                    if key in leaf and leaf[key] in pool:
-                        always = "false" if key.startswith("no_") else "true"
-                        found.append(
-                            _warn(
-                                f"section {sid}",
-                                f"{kind} requires {key} {leaf[key]!r}, which this section's own effects set, so it is always {always}",
-                            )
+                for key in ("note", "no_note", "item", "no_item"):
+                    now = changes.get((key.removeprefix("no_"), leaf.get(key)))
+                    if key not in leaf or now is None:
+                        continue
+                    always = str(now != key.startswith("no_")).lower()
+                    verb = "set" if now else "clear"
+                    found.append(
+                        _warn(
+                            f"section {sid}",
+                            f"{kind} requires {key} {leaf[key]!r}, which this section's own effects {verb}, so it is always {always}",
                         )
+                    )
     return found
 
 

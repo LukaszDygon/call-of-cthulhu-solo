@@ -64,6 +64,14 @@ def test_condition_set_by_the_same_section_is_flagged(tiny):
     assert any("always true" in m for m in messages(tiny, "warning"))
 
 
+def test_condition_cleared_by_the_same_section_is_flagged(tiny):
+    # A Fistful of Cows, section 77: the section unnoted a word that its own extra required, so the extra never showed.
+    tiny["sections"][3].setdefault("effects", []).append({"unnote": "SEEN"})
+    tiny["sections"][3]["extra"] = [{"requires": {"note": "SEEN"}, "text": "The bicycle lies in the ditch."}]
+    found = messages(tiny, "warning")
+    assert any("own effects clear, so it is always false" in m for m in found), found
+
+
 def test_roll_only_one_investigator_can_make_is_an_error(tiny):
     tiny["sections"][3]["choices"].append(
         {"text": "Sneak.", "roll": {"skill": "Stealth", "success": 4, "failure": 4}}
