@@ -5,6 +5,16 @@ a story before you "fix" one of these during `/verify-story` or a rework. Newest
 
 ## The Last Bus from Innsmouth (`site/adventures/innsmouth.yaml`)
 
+**2026-10-10: short screens, at the author's request.** After playing it, the author found the text far too long,
+with scenery on almost every early screen. The story was trimmed from about 28,000 words of main text to 17,500, and
+nine long scenes were split into two screens with a decision between them. Don't grow the descriptions back.
+
+- **Rhythm (story-craft §1):** about 44% of sections are short beats under 60 words, against the guide's ~30%. No
+  set piece runs past about 230 words, against the guide's 250-500. A place gets a sentence or two the first time
+  you see it, and the scene then moves on to the person, the choice or the danger.
+- Numbers after the trim: 241 sections, about 80 seen words per screen (72 in the early game), and an average
+  playthrough of about 34 sections, or roughly 2,900 words.
+
 **2026-10-07: solo, and long, by the author's choice.** Both were decided in the `/new-story` interview and the
 first stats run. Leave them alone unless the author asks again.
 
