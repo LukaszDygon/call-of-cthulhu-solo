@@ -32,7 +32,7 @@ blurb: |
 investigator_intro: Four detectives in Los Angeles, of four different kinds. Choose the one Marian Voss walks in on at half past nine on Wednesday morning.
 # Shape this story is held to by `gamebook stats` and the test suite.
 targets:
-  sections: [340, 375]
+  sections: [380, 420]
   path_mean: [32, 42]
   endings_reached: 22
   cosmetic_choices: 0.1
@@ -323,6 +323,8 @@ sections:
         to: 2
       - text: "Let it ring, and keep asking her questions."
         to: 3
+      - text: "Tell her you don't do missing husbands."
+        to: 5
 
   2:
     title: The Wrong Number
@@ -358,6 +360,10 @@ sections:
   4:
     title: The Retainer
     extra:
+      - requires: {note: FREEZER}
+        before: true
+        text: |
+          "How did he know about Pythagoras?" Marian says. You don't know. You don't mention the freezer. She opens her purse, and shuts it again.
       - requires: {investigator: ray}
         text: |
           Fifty a day and expenses. She counts out two days in tens, folded small, and you try not to look as if you need them.
@@ -381,29 +387,25 @@ sections:
         to: 9
       - text: "Start at Helion Dynamics in El Segundo."
         to: 22
-      - text: "Drive up Topanga Canyon."
-        to: 34
       - text: "Go and see the police who found the car."
         to: 44
-      - text: "Find the radio station that keeps playing that tune."
-        to: 49
+      - text: "Drive up Topanga Canyon."
+        to: 34
       - text: "Go down and follow the ice-cream truck."
         effects: [{luck: 5}, {san: "1/1D4"}, {note: NOON}]
         to: 55
-      - text: "Tell her you don't do missing husbands."
-        to: 5
 
   5:
     title: "No"
     text: |
       She leaves her card on the desk and goes, very upright.
 
-      Within a minute a pigeon flies in through the window and won't leave. Water comes through the ceiling from upstairs. The phone rings, and stops, and rings again.
+      Within a minute a pigeon flies in through the window and won't leave. Water comes through the ceiling from upstairs. The phone stops ringing, and starts again.
 
       The card says MARIAN VOSS in schoolteacher capitals.
     choices:
       - text: "Catch her on the stairs."
-        to: 4
+        to: 374
       - text: "Answer the phone, to make it stop."
         to: 6
       - text: "Let her go, and go out for pie."
@@ -420,6 +422,26 @@ sections:
     choices:
       - text: "Go out to the landing."
         effects: [{note: FREEZER}]
+        to: 373
+
+  373:
+    title: The Second Landing
+    text: |
+      She's on the second landing, exactly where the voice said, crying a little into a handkerchief.
+
+      You tell her a man on the phone says the cat's fine. She stares at you as if you'd taken a coin out of her ear. Then she blows her nose, and follows you back up.
+    choices:
+      - text: "Talk terms."
+        to: 4
+
+  374:
+    title: On the Stairs
+    text: |
+      You catch her two flights down, with her hand on the rail.
+
+      "I don't do missing husbands," you say. "As a rule." She waits. Upstairs the dripping has stopped, and the pigeon has gone quiet, as if they were listening too.
+    choices:
+      - text: "Bring her back up, and talk terms."
         to: 4
 
   7:
@@ -548,7 +570,7 @@ sections:
     effects:
       - gain: tape
     text: |
-      The freezer in the garage hums like it knows something. Behind six Swanson dinners is a bread bag, and in it a seven-inch reel of tape, frosted white. The label, in a careful hand, says SWEETWATER 6-21-69.
+      The grey cat is already sitting on the freezer lid when you get to the garage. The freezer hums like it knows something. Behind six Swanson dinners is a bread bag, and in it a seven-inch reel of tape, frosted white. The label, in a careful hand, says SWEETWATER 6-21-69.
 
       In the house, the phone starts ringing.
     choices:
@@ -580,7 +602,15 @@ sections:
     choices:
       - text: "Search the study before you go."
         requires: {no_item: helion-badge}
-        roll: {skill: Spot Hidden, success: 11, failure: 21}
+        roll: {skill: Spot Hidden, success: 11, failure: 400}
+      - text: "Thank Marian, and go."
+        to: 21
+
+  400:
+    title: Nothing of His
+    text: |
+      You go through the desk drawers twice. Bills, pencils, a fourth-grade spelling test. Whatever Leonard kept, he didn't keep it here.
+    choices:
       - text: "Thank Marian, and go."
         to: 21
 
@@ -608,11 +638,21 @@ sections:
       - text: "Hand over the reel."
         requires: {item: tape}
         effects: [{lose: tape}]
-        to: 21
+        to: 390
       - text: "Tell him you don't know what he's talking about."
-        roll: {skill: [Fast Talk, Persuade, Intimidate], success: 21, failure: 16}
+        roll: {skill: [Fast Talk, Persuade, Intimidate], success: 390, failure: 16}
       - text: "Ask what's in the envelope."
         to: 17
+
+  390:
+    title: No Hurry
+    text: |
+      Calloway looks at you a moment longer, then tucks the envelope into his jacket.
+
+      "Eight o'clock," he says. The Plymouth backs out of the drive without hurrying.
+    choices:
+      - text: "Wave to Marian, and get in your car."
+        to: 21
 
   16:
     title: Company Property
@@ -651,6 +691,14 @@ sections:
         to: 20
       - text: "Go after him, and give it back."
         effects: [{note: TAILED}]
+        to: 382
+
+  382:
+    title: At the Light
+    text: |
+      You catch the grey Plymouth at the next light, and lean on your horn until he winds his window down. You hold the envelope out of your window.
+    choices:
+      - text: "Wait for him to say something."
         to: 19
 
   19:
@@ -818,8 +866,16 @@ sections:
       - text: "Ask what's in the envelope."
         to: 17
       - text: "Watch his face, and mention the desert."
-        roll: {skill: Psychology, success: 27, failure: 33}
+        roll: {skill: Psychology, success: 27, failure: 401}
       - text: "Thank him, and leave."
+        to: 33
+
+  401:
+    title: Perfectly Pleasant
+    text: |
+      His face gives you nothing at all, beautifully. He walks you to the door himself.
+    choices:
+      - text: "Go out into the sun."
         to: 33
 
   27:
@@ -876,8 +932,16 @@ sections:
       "It hears all the way to the edge of everything," she says. "Isn't that dreamy?"
     choices:
       - text: "Tell her it is, and ask what else it hears."
-        roll: {skill: [Charm, Fast Talk], success: 31, failure: 33}
+        roll: {skill: [Charm, Fast Talk], success: 31, failure: 402}
       - text: "Take the brochure, and go."
+        to: 33
+
+  402:
+    title: Stars, Silly
+    text: |
+      "Stars, silly," she says, and laughs, and walks you to the door.
+    choices:
+      - text: "Go out into the sun."
         to: 33
 
   31:
@@ -1225,11 +1289,11 @@ sections:
       - text: "Go and see."
         requires: {no_note: NOON}
         effects: [{luck: 5}, {san: "1/1D4"}, {note: NOON}]
-        to: 55
+        to: 383
       - text: "Go and see."
         requires: {note: NOON}
         effects: [{luck: 5}, {san: "1/1D4"}]
-        to: 77
+        to: 384
       - text: "Stick to your list."
         requires: {no_note: NOON}
         effects: [{note: NOON}]
@@ -1241,6 +1305,26 @@ sections:
       - text: "Stick to your list."
         requires: {note: LATE}
         to: 82
+
+  383:
+    title: Pacific and Windward
+    text: |
+      Two cruisers are angled across Pacific when you get there, lights going. The pink truck sits between them, playing its tune.
+
+      When the driver sees you, he waves, as if you were late, and pulls away slowly. The cops let him go. Nobody seems to remember why they came. The truck sets off inland, the long way round.
+    choices:
+      - text: "Follow the truck."
+        to: 55
+
+  384:
+    title: Pacific and Windward, Later
+    text: |
+      Two cruisers are angled across Pacific when you get there, lights going. The pink truck sits between them, playing its tune.
+
+      When the driver sees you, he waves, as if you were late, and pulls away slowly. The cops let him go. Nobody seems to remember why they came.
+    choices:
+      - text: "Follow the truck."
+        to: 77
 
   # ---------------------------------------------------------------------------------------------------------------
   # KSUN 1120 (morning or afternoon)
@@ -1299,11 +1383,19 @@ sections:
     choices:
       - text: "Ask him for a dub of the reel."
         requires: {no_item: tape}
-        roll: {skill: [Persuade, Charm, Fast Talk], success: 52, failure: 54}
+        roll: {skill: [Persuade, Charm, Fast Talk], success: 52, failure: 403}
       - text: "Go on the air, and ask the city for Leonard Voss."
         effects: [{luck: 5}, {san: "1/1D4"}]
         to: 53
       - text: "Thank him for the peppermint, and go."
+        to: 54
+
+  403:
+    title: Station Property
+    text: |
+      "The reel stays with the station, baby," Larry says, and walks you out with another peppermint.
+    choices:
+      - text: "Go out onto La Cienega."
         to: 54
 
   52:
@@ -1448,7 +1540,7 @@ sections:
     choices:
       - text: "Wait for the next one."
         to: 60
-      - text: "Paddle in with Bix. The truck is waiting for somebody."
+      - text: "Paddle in with Bix."
         to: 65
 
   60:
@@ -1506,7 +1598,15 @@ sections:
       "...the Zuma Doe, the one who sings? Camarillo took him Monday. Doctor says he's twenty-five. His teeth say fifty." The orderly laughs. "I'm serious. And he keeps telling everyone what time it is. Four fifty-six. All day long."
     choices:
       - text: "Ask her about him while she stitches you."
-        roll: {skill: [Charm, Persuade, Fast Talk], success: 64, failure: 82}
+        roll: {skill: [Charm, Persuade, Fast Talk], success: 64, failure: 404}
+
+  404:
+    title: Six Stitches
+    text: |
+      She stitches you in silence, and the orderly wanders off. When they let you out, the sun is going down.
+    choices:
+      - text: "Go out into the evening."
+        to: 82
 
   64:
     title: The Nurse
@@ -1546,7 +1646,7 @@ sections:
       The carousel operator is holding one horse empty, and looking at you.
     choices:
       - text: "Jimmy the glovebox."
-        roll: {skill: Locksmith, success: 67, failure: 70}
+        roll: {skill: Locksmith, success: 67, failure: 405}
       - text: "Ride the carousel he's holding for you."
         effects: [{luck: 5}, {san: "1/1D4"}]
         to: 68
@@ -1561,6 +1661,14 @@ sections:
       - text: "Find a phone, and call it in."
         requires: {note: SNAG2}
         to: 107
+
+  405:
+    title: Stuck
+    text: |
+      The glovebox won't give. When you look up, the carousel has started without you, and the shadows on the pier are long.
+    choices:
+      - text: "Let the afternoon go."
+        to: 70
 
   67:
     title: The Glovebox
@@ -1752,7 +1860,7 @@ sections:
 
       She gets out on Sunset Boulevard, under a neon moth, and walks into the crowd, and you can't find her again.
     choices:
-      - text: "Park, and go in after her."
+      - text: "Park, and try the club."
         to: 83
 
   79:
@@ -1937,7 +2045,7 @@ sections:
       - hp: "-1D3"
       - note: TAILED
     text: |
-      In the alley behind the club, two men in grey suits are waiting by the bins. They don't say anything. One of them hits you, politely, in the stomach.
+      You end up round the side of the club, in the alley by the bins, and two men in grey suits are waiting there. They don't say anything. One of them hits you, politely, in the stomach.
 
       "Dr. Marrow would like to meet you," the other says, as you look at the asphalt. "When you're feeling better."
     extra:
@@ -2318,7 +2426,7 @@ sections:
 
       A grey Plymouth is parked behind you, close enough to kiss your bumper. A knuckle taps on your window. You wipe the glass.
 
-      The man outside has a grey suit, a kind face and two coffees in a cardboard tray. "Hollis Calloway, Helion Dynamics," he says. "Dr. Marrow would like to buy you breakfast. She asked me to say please."
+      The man outside has a grey suit, a kind face and two coffees in a cardboard tray. "Hollis Calloway, Helion Dynamics," he says. "Dr. Marrow would like to see you this morning. She asked me to say please."
     choices:
       - text: "Take the coffee, and go with him."
         to: 155
@@ -2367,6 +2475,16 @@ sections:
     choices:
       - text: "Climb into the cab."
         effects: [{luck: 5}, {san: "1/1D4"}]
+        to: 397
+
+  397:
+    title: On the House
+    text: |
+      He tows you down the canyon and across the city with the radio playing the tune, and drops you and your car at Hancock Park.
+
+      He won't take money. "On the house, man," he says, and drives away.
+    choices:
+      - text: "Walk into the park."
         to: 174
 
   112:
@@ -2778,6 +2896,16 @@ sections:
       - text: "Step down onto the street."
         to: 136
       - text: "Stay in your seat, and let him go back round."
+        to: 399
+
+  399:
+    title: Back Round
+    text: |
+      The driver goes back round, down through the river and out the other side. He lets you off under a bridge in Silver Lake without a word.
+
+      Across the street, a green bungalow has its porch light on in the daytime.
+    choices:
+      - text: "Climb the steps to the bungalow."
         to: 141
 
   136:
@@ -3155,34 +3283,54 @@ sections:
       - text: "Tell her no, and turn for the door."
         requires: {no_note: SNAG}
         effects: [{note: SNAG}, {luck: -5}, {note: CAPTIVE}, {lose: revolver}, {lose: lockpicks}]
-        to: 168
+        to: 389
       - text: "Tell her no, and turn for the door."
         requires: [{note: SNAG}, {no_note: SNAG2}]
         effects: [{note: SNAG2}, {luck: -5}, {hp: "-1"}, {note: CAPTIVE}, {lose: revolver}, {lose: lockpicks}]
-        to: 168
+        to: 389
       - text: "Tell her no, and turn for the door."
         requires: {note: SNAG2}
         to: 204
+
+  389:
+    title: Two Steps
+    text: |
+      You get two steps. Calloway is in the doorway, looking sorrowful about it, and the two men by the door are very strong.
+
+      "Somewhere quiet," Marrow says, and goes back to her desk.
+    choices:
+      - text: "Go where they take you."
+        to: 168
 
   156:
     title: The Grey Car
     effects:
       - note: TAILED
     text: |
-      Wherever you meant to go, you don't get there. You find your car, or a car, and get onto Wilshire.
+      Somehow you're on Wilshire, behind a wheel, going wherever you meant to go.
 
-      A grey Plymouth falls in behind you at the first light. It stays one car back through Beverly Hills. When it pulls alongside at a red, you see the two men in the front. They wear grey suits and sunglasses, and under the sunglasses there isn't quite enough face, as if someone had described a face to them once.
+      At the first light, a grey Plymouth is in your mirror. It stays one car back through Beverly Hills. When it pulls alongside at a red, you see the two men in the front. They wear grey suits and sunglasses, and under the sunglasses there isn't quite enough face, as if someone had described a face to them once.
     extra:
       - requires: {note: SNAG2}
         text: Every light you reach turns red. The city has started to look past you.
       - text: The light changes.
     choices:
       - text: "Floor it, and lose them in the traffic."
-        roll: {skill: Drive Auto, success: 174, failure: 157}
+        roll: {skill: Drive Auto, success: 386, failure: 157}
       - text: "Ram them. See how they like it."
         to: 368
       - text: "Pull over, and let them come."
         to: 157
+
+  386:
+    title: Lost Them
+    text: |
+      You swing left across three lanes at Rodeo, against the light. The Plymouth is carried on by the traffic like a leaf in a gutter.
+
+      You don't stop driving until Hancock Park. You pull in by the tar pits with your hands shaking on the wheel.
+    choices:
+      - text: "Get out, and get your breath back."
+        to: 174
 
   368:
     title: Wreck
@@ -3292,6 +3440,14 @@ sections:
         to: 165
       - text: "Say nothing at all."
         effects: [{note: CAPTIVE}, {lose: revolver}, {lose: lockpicks}]
+        to: 408
+
+  408:
+    title: Nothing at All
+    text: |
+      Marrow waits. Then she nods to someone behind you.
+    choices:
+      - text: "Go where they take you."
         to: 168
 
   163:
@@ -3307,6 +3463,16 @@ sections:
         to: 164
       - text: "Snatch the notepad, and tear out the page."
         effects: [{note: CAPTIVE}, {lose: revolver}, {lose: lockpicks}]
+        to: 381
+
+  381:
+    title: The Page
+    text: |
+      You get the page out, half crumpled, before Calloway's hand closes on your wrist. He does it very gently, the way you'd take scissors off a child.
+
+      Marrow smooths the page flat on her desk. "Somewhere quiet, Hollis," she says.
+    choices:
+      - text: "Go where they take you."
         to: 168
 
   362:
@@ -3521,7 +3687,17 @@ sections:
       - text: "Stand your ground, and fight them."
         to: 369
       - text: "Throw yourself back from the rail, and run."
-        roll: {skill: Dodge, success: 178, failure: 177}
+        roll: {skill: Dodge, success: 385, failure: 177}
+
+  385:
+    title: Over Backwards
+    text: |
+      You go over backwards, and roll, and keep rolling. Out on Wilshire a horn plays four notes of the tune.
+
+      The grey hands stop at the rail, as if it were a property line.
+    choices:
+      - text: "Run towards the music."
+        to: 178
 
   369:
     title: More of Them
@@ -3579,7 +3755,11 @@ sections:
     text: |
       The front desk is a nurse with a cardigan and a face that has said no to a great many people. "The Zuma Doe," she says. "Ward 9. Visiting is two to six, and relatives only. Are you a relative?"
 
-      Behind her, down a long tiled corridor, somebody is singing. A man's voice, light and happy, the tune you've been hearing for two days.
+    extra:
+      - requires: {investigator: lena}
+        text: Behind the desk, a younger nurse glances at the press card in your hand, and gives you a very small nod.
+      - text: |
+          Down a long tiled corridor behind the desk, somebody is singing. A man's voice, light and happy, the tune you've been hearing for two days.
     choices:
       - text: "Show her your badge."
         requires: {item: badge}
@@ -3841,7 +4021,12 @@ sections:
 
       Everyone here is somebody's best night. A girl in a prom dress. A sailor in 1945. An old man dancing with nobody, beautifully.
 
-      By the rail, looking at the view, in a rumpled brown suit, sits Leonard Voss. He looks radiant. He sees you, and pats the chair beside him.
+      By the rail, looking at the view, in a rumpled brown suit, sits Leonard Voss. He looks radiant.
+    extra:
+      - requires: {note: DREAMT}
+        before: true
+        text: The stairs breathe under you as you climb. By the top, the tab has found the city, and the city has found you.
+      - text: He sees you, and pats the chair beside him.
     choices:
       - text: "Sit down, and ask him what he set out to do."
         to: 195
@@ -3929,7 +4114,7 @@ sections:
   199:
     title: Into the Shadow
     text: |
-      Grey men come up out of the stairwell, three, then five, in grey suits and sunglasses. Where they walk, the white leather goes grey, and the music goes out like a match.
+      Something changes at the top of the stairs. Grey men come up out of the stairwell, three, then five, in grey suits and sunglasses. Where they walk, the white leather goes grey, and the music goes out like a match.
 
       Leonard Voss finishes his drink, gets up from his chair and walks into the sundial's shadow. He doesn't come out the other side.
 
@@ -4068,6 +4253,16 @@ sections:
         to: 208
       - text: "Pick up the hanging receiver. It's meant for you."
         to: 206
+      - text: "Go and find somebody who's still awake."
+        to: 375
+
+  375:
+    title: Somebody Awake
+    text: |
+      The sleepwalkers go round you like water round a stone. Somebody in this city must still have their eyes open.
+
+      You stand on the corner, under the gold streetlight, and think about who.
+    choices:
       - text: "Go to Agnes. She'll be up on her roof, painting."
         requires: {note: AGNES}
         to: 233
@@ -4347,8 +4542,16 @@ sections:
       He is one of Helion's listeners. Or he was.
     choices:
       - text: "Ask him gently what they were promised."
-        roll: {skill: [Psychology, Occult], success: 222, failure: 210}
+        roll: {skill: [Psychology, Occult], success: 222, failure: 396}
       - text: "Leave him to it, and paddle back."
+        to: 210
+
+  396:
+    title: The Willow
+    text: |
+      He only shakes his head, and goes on weeping, and the willow closes over him like a curtain.
+    choices:
+      - text: "Paddle back."
         to: 210
 
   222:
@@ -4967,8 +5170,16 @@ sections:
     choices:
       - text: "Read the rider, line by line."
         requires: {skill: Accounting, min: 50}
-        roll: {skill: Accounting, success: 253, failure: 230}
+        roll: {skill: Accounting, success: 253, failure: 406}
       - text: "Leave it. You've seen enough of this place."
+        to: 230
+
+  406:
+    title: Small Type
+    text: |
+      The type swims. Whatever the rider says, it says it for lawyers. You put the box back where you found it.
+    choices:
+      - text: "Leave it."
         to: 230
 
   253:
@@ -5396,8 +5607,26 @@ sections:
     choices:
       - text: "Run for the pink truck."
         effects: [{unnote: TAILED}]
-        roll: {skill: [Dodge, Luck], success: 287, failure: 316}
+        roll: {skill: [Dodge, Luck], success: 387, failure: 388}
       - text: "Go quietly. Let them take you to the dish."
+        to: 316
+
+  387:
+    title: The Back Door
+    text: |
+      You run. The truck's back door swings open as you reach it, and shuts behind you on its own.
+
+      Through the little window, the grey men stand at the kerb in a row and watch the tune go.
+    choices:
+      - text: "Climb up front."
+        to: 287
+
+  388:
+    title: A Grey Hand
+    text: |
+      The truck pulls away just as you reach it, still playing. A grey hand takes your collar from behind, very gently, as if it were straightening it.
+    choices:
+      - text: "Go with them."
         to: 316
 
   279:
@@ -5420,7 +5649,7 @@ sections:
         to: 280
       - text: "Call Bix. He has a van."
         requires: {note: BIX}
-        to: 292
+        to: 398
       - text: "See Marian in Altadena first."
         requires: {no_note: ALTADENA}
         to: 281
@@ -5435,8 +5664,16 @@ sections:
       - text: "Take your own car. You'll get there under your own steam."
         requires: {note: SNAG2}
         to: 286
-      - text: "Drive north instead, out of all of this."
-        to: 284
+
+  398:
+    title: Already Rolling
+    text: |
+      You call from the pay phone on the corner. Bix answers on the first ring.
+
+      "Already rolling, man," he says. Ten minutes later the van pulls up at the kerb.
+    choices:
+      - text: "Get in."
+        to: 292
 
   280:
     title: The Grey Sedan
@@ -5994,7 +6231,7 @@ sections:
     title: The Helicopter
     effects: [{note: CAPTIVE}, {lose: revolver}, {lose: lockpicks}, {lose: hut-keys}]
     text: |
-      They search you, and take anything that shoots or opens a lock. Then they put you in the back of a Helion helicopter with your wrists cuffed in front of you.
+      On the apron behind Helion's hangar in El Segundo, they search you, and take anything that shoots or opens a lock. Then they put you in the back of a Helion helicopter with your wrists cuffed in front of you.
 
       Los Angeles tips away underneath, and then the mountains, and then the brown, endless desert. A man in a grey suit sits across from you with his knees almost touching yours: Hollis Calloway, Helion's head of security. He offers you a stick of gum.
 
@@ -6055,36 +6292,67 @@ sections:
       - requires: {note: GREY}
         text: It makes no sound in the wind. You know what makes things like that.
     choices:
-      - text: "Walk up to the front gate with Voss's pass."
-        requires: {item: helion-badge}
-        to: 320
-      - text: "Badge the guard at the front gate."
-        requires: [{item: badge}, {note: ROSTER}]
-        roll: {skill: [Intimidate, Fast Talk], bonus: 1, success: 321, failure: 325}
-      - text: "Badge the guard at the front gate."
-        requires: [{item: badge}, {no_note: ROSTER}]
-        roll: {skill: [Intimidate, Fast Talk], success: 321, failure: 325}
-      - text: "Tell the guard you're from the company that insures every bolt in here."
-        requires: {skill: Credit Rating, min: 50}
-        roll: {skill: Credit Rating, success: 321, failure: 325}
-      - text: "Walk up to the gate in your Helion coveralls, with Fred's badge."
-        requires: {item: overalls}
-        roll: {skill: [Fast Talk, Stealth], success: 321, failure: 325}
-      - text: "Pick the padlock on the back gate."
-        requires: {item: lockpicks}
-        roll: {skill: Locksmith, success: 326, failure: 325}
-      - text: "Let yourself in at the back gate with Leonard's keys."
-        requires: {item: hut-keys}
-        to: 326
+      - text: "Walk up to the front gate."
+        to: 378
+      - text: "Go round to the padlocked back gate."
+        requires: {any: [{item: lockpicks}, {item: hut-keys}]}
+        to: 379
       - text: "Walk to where the fence has a gap in it."
         requires: {any: [{item: painting}, {note: GAP}]}
         to: 322
-      - text: "Rush the front gate. There are only four guards."
-        to: 371
       - text: "Climb the fence at the far side."
         roll: {skill: [Climb, STR], success: 326, failure: 323}
       - text: "Slip through the little side gate that's standing open."
         to: 324
+
+  378:
+    title: The Front Gate
+    text: |
+      The guard in the shack looks at you over his sunglasses. Three more lounge behind him, and two of them have rifles across their knees.
+
+      "Help you?" he says.
+    choices:
+      - text: "Show him Voss's pass."
+        requires: {item: helion-badge}
+        to: 320
+      - text: "Show him your badge."
+        requires: [{item: badge}, {note: ROSTER}]
+        roll: {skill: [Intimidate, Fast Talk], bonus: 1, success: 321, failure: 391}
+      - text: "Show him your badge."
+        requires: [{item: badge}, {no_note: ROSTER}]
+        roll: {skill: [Intimidate, Fast Talk], success: 321, failure: 391}
+      - text: "Tell the guard you're from the company that insures every bolt in here."
+        requires: {skill: Credit Rating, min: 50}
+        roll: {skill: Credit Rating, success: 321, failure: 391}
+      - text: "Walk up to the gate in your Helion coveralls, with Fred's badge."
+        requires: {item: overalls}
+        roll: {skill: [Fast Talk, Stealth], success: 321, failure: 391}
+      - text: "Rush the front gate. There are only four guards."
+        to: 371
+      - text: "Say you're lost, walk round to the far side, and go over the fence."
+        roll: {skill: [Climb, STR], success: 326, failure: 323}
+
+  379:
+    title: The Back Gate
+    text: |
+      The back gate is on the far side from the shack, chained and padlocked. Nobody is watching it. The transformer yard hums behind the hut.
+    choices:
+      - text: "Pick the padlock on the back gate."
+        requires: {item: lockpicks}
+        roll: {skill: Locksmith, success: 326, failure: 392}
+      - text: "Let yourself in at the back gate with Leonard's keys."
+        requires: {item: hut-keys}
+        to: 326
+      - text: "Climb the fence beside it instead."
+        roll: {skill: [Climb, STR], success: 326, failure: 323}
+
+  392:
+    title: The Padlock
+    text: |
+      The padlock won't give. When you look up, two guards are walking round the fence towards you, in no hurry at all.
+    choices:
+      - text: "Put your hands where they can see them."
+        to: 325
 
   371:
     title: Four Guards
@@ -6107,6 +6375,14 @@ sections:
         to: 321
       - text: "Smile, and wait."
         requires: {note: TAILED}
+        to: 391
+
+  391:
+    title: Not on the List
+    text: |
+      The guard looks at you a while longer, then at his list, and picks up the phone. Two of the others get up, unslinging their rifles.
+    choices:
+      - text: "Put your hands where they can see them."
         to: 325
 
   321:
@@ -6433,6 +6709,35 @@ sections:
         text: The gold seems to go cold whenever it touches you.
       - text: The clock says forty seconds.
     choices:
+      - text: "Get to the feed, and give the sky a song of its own."
+        requires: [{no_note: CAPTIVE}, {any: [{item: tape}, {note: LASTBAR}, [{item: transistor}, {note: LARK}]]}]
+        to: 376
+      - text: "Stop the broadcast, any way you can."
+        requires: {no_note: CAPTIVE}
+        to: 377
+      - text: "Work your hand out of the cuff."
+        requires: [{note: CAPTIVE}, {no_note: SNAG2}]
+        roll: {skill: Luck, success: 339, failure: 355}
+      - text: "Work your hand out of the cuff."
+        requires: [{note: CAPTIVE}, {note: SNAG2}]
+        roll: {skill: Luck, bonus: -1, success: 339, failure: 355}
+      - text: "Put the Daybreak tab on your tongue, and let it take you."
+        requires: {item: tab}
+        effects: [{lose: tab}]
+        to: 367
+      - text: "Walk out of the hut with what you know, while you still can."
+        requires: {no_note: CAPTIVE}
+        to: 347
+      - text: "Stand back, and let the professionals work."
+        to: 355
+
+  376:
+    title: The Feed
+    text: |
+      The feed rack is at your elbow: a wall of patch cords, and one live microphone on a gooseneck. Nobody has seen you move. Everyone is looking at the sky.
+
+      Thirty seconds.
+    choices:
       - text: "Slide out the reel you hid, and switch it into the feed."
         requires: [{item: tape}, {no_note: CAPTIVE}, {note: PRIMED}]
         roll: {skill: [Electrical Repair, Mechanical Repair], bonus: 1, success: 348, failure: 340}
@@ -6447,7 +6752,27 @@ sections:
         roll: {skill: Listen, success: 348, failure: 341}
       - text: "Lean into the feed microphone, and hum it the missing bar."
         requires: [{note: LASTBAR}, {no_note: CAPTIVE}]
-        roll: {skill: Luck, success: 348, failure: 355}
+        roll: {skill: Luck, success: 348, failure: 395}
+
+  395:
+    title: The Third Note
+    text: |
+      Your voice cracks on the third note. Calloway's hand closes over your mouth from behind. Not roughly.
+    choices:
+      - text: "Watch Marrow's hand on the switch."
+        to: 355
+
+  377:
+    title: Thirty Seconds
+    text: |
+      Thirty seconds, and a room full of people between you and the switch.
+    extra:
+      - requires: {no_note: TURNED}
+        text: Calloway has seen you move. He takes a step towards you, a second too late.
+      - requires: {note: TURNED}
+        text: Calloway has seen you move. He looks away, at the sky, and lets you.
+      - text: The console hums under Marrow's hand.
+    choices:
       - text: "Pull the plugs out of the console."
         requires: [{no_note: CAPTIVE}, {any: [{note: TURNED}, {note: LOCKED}, {note: BURNED}, {note: FREED}, {note: UNPLUGGED}, {note: DECOY}, {note: WAVER}, {note: SHAKEN}]}]
         roll: {skill: [STR, Mechanical Repair], bonus: 1, success: 349, failure: 342}
@@ -6456,28 +6781,29 @@ sections:
         roll: {skill: [STR, Mechanical Repair], success: 349, failure: 342}
       - text: "Tear the wires off Leonard's temples."
         requires: [{note: TAKEN}, {no_note: CAPTIVE}]
-        to: 349
+        to: 393
       - text: "Shoot the console."
         requires: [{item: revolver}, {no_note: CAPTIVE}]
-        to: 349
-      - text: "Work your hand out of the cuff."
-        requires: [{note: CAPTIVE}, {no_note: SNAG2}]
-        roll: {skill: Luck, success: 339, failure: 355}
-      - text: "Work your hand out of the cuff."
-        requires: [{note: CAPTIVE}, {note: SNAG2}]
-        roll: {skill: Luck, bonus: -1, success: 339, failure: 355}
-      - text: "Put the Daybreak tab on your tongue, and let it take you."
-        requires: {item: tab}
-        effects: [{lose: tab}]
-        to: 367
+        to: 394
       - text: "Go for the gun under Calloway's jacket."
         requires: [{no_note: CAPTIVE}, {no_note: TURNED}]
         to: 372
-      - text: "Walk out of the hut with what you know, while you still can."
-        requires: {no_note: CAPTIVE}
-        to: 347
-      - text: "Stand back, and let the professionals work."
-        to: 355
+
+  393:
+    title: The Wires
+    text: |
+      You rip the tape and the wires away from his temples. Leonard arches on the gurney, and every needle in the hut slams over at once.
+    choices:
+      - text: "Hold on."
+        to: 349
+
+  394:
+    title: The Shot
+    text: |
+      The .38 is very loud in the little hut. The console's front panel stars, and smokes, and a technician sits down on the floor.
+    choices:
+      - text: "Hold on."
+        to: 349
 
   372:
     title: Calloway's Gun
@@ -6505,7 +6831,7 @@ sections:
         roll: {skill: [STR, Mechanical Repair], success: 349, failure: 342}
       - text: "Tear the wires off Leonard's temples."
         requires: {note: TAKEN}
-        to: 349
+        to: 393
       - text: "Run for the door."
         to: 347
 
@@ -6584,6 +6910,7 @@ sections:
         effects: [{lose: tab}]
         to: 367
       - text: "Let go of the rail, open your arms, and let it all in."
+        requires: {no_item: tab}
         to: 346
       - text: "Shoot at the thing in the sky."
         requires: {item: revolver}
@@ -6625,24 +6952,15 @@ sections:
         text: Where it touches you, the gold goes cold.
       - text: In the hut, a voice it has never heard is getting ready to speak.
     choices:
-      - text: "Give the Ice-Cream Man your reel."
-        requires: {item: tape}
-        effects: [{lose: tape}]
-        to: 348
-      - text: "Turn the truck's radio up to KSUN, as loud as it goes."
-        requires: [{note: LARK}, {no_note: SNAG2}]
-        roll: {skill: Luck, success: 348, failure: 341}
-      - text: "Turn the truck's radio up to KSUN, as loud as it goes."
-        requires: [{note: LARK}, {note: SNAG2}]
-        roll: {skill: Luck, bonus: -1, success: 348, failure: 341}
+      - text: "Give it a song of its own."
+        requires: {any: [{item: tape}, {note: LARK}, {note: LASTBAR}]}
+        to: 380
       - text: "Put the Daybreak tab on your tongue, and let it take you."
         requires: {item: tab}
         effects: [{lose: tab}]
         to: 367
-      - text: "Hum it the missing bar, as loud as you can."
-        requires: {note: LASTBAR}
-        roll: {skill: Luck, success: 348, failure: 346}
       - text: "Walk out onto the salt, open your arms, and let it all in."
+        requires: {no_item: tab}
         to: 346
       - text: "Shoot at the thing in the sky."
         requires: {item: revolver}
@@ -6651,6 +6969,35 @@ sections:
         to: 347
       - text: "Stand by the truck, and let it happen."
         to: 355
+
+  380:
+    title: The Song
+    text: |
+      "It's never heard itself," the Ice-Cream Man says. "Not once. Give it the tune, and it'll know what it is."
+
+      He looks at you. Whatever you've got, it's now.
+    choices:
+      - text: "Give the Ice-Cream Man your reel."
+        requires: {item: tape}
+        effects: [{lose: tape}]
+        to: 407
+      - text: "Turn the truck's radio up to KSUN, as loud as it goes."
+        requires: [{note: LARK}, {no_note: SNAG2}]
+        roll: {skill: Luck, success: 348, failure: 341}
+      - text: "Turn the truck's radio up to KSUN, as loud as it goes."
+        requires: [{note: LARK}, {note: SNAG2}]
+        roll: {skill: Luck, bonus: -1, success: 348, failure: 341}
+      - text: "Hum it the missing bar, as loud as you can."
+        requires: {note: LASTBAR}
+        roll: {skill: Luck, success: 348, failure: 346}
+
+  407:
+    title: The Speaker
+    text: |
+      He threads the reel into the truck's roof speaker as if he's done it a thousand times, and turns it all the way up.
+    choices:
+      - text: "Listen."
+        to: 348
 
   346:
     title: Too Much

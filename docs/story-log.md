@@ -5,6 +5,27 @@ a story before you "fix" one of these during `/verify-story` or a rework. Newest
 
 ## A Very American Dream (`site/adventures/american-dream.yaml`)
 
+**2026-10-28, after the first playtest: no more than five choices on a screen, and every beat is followed
+through.** The author found screens with up to nine options, and dramatic beats (the phone call at the start) with
+nothing on the next screen. Keep both rules when you add to the story.
+
+- **At most five visible choices.** Crowded screens were split at a natural fork into a short follow-on screen:
+  - Midnight's allies → 375
+  - the hut's song and stopping it → 376/377
+  - Sweetwater's front and back gates → 378/379
+  - the salt's song → 380
+  
+  At the dish and the salt, taking the tab replaces opening your arms, since both lead to the same end. The refusal
+  moved from The Retainer to Mrs. Voss. KSUN left the morning list but stays at noon and 3:30. Friday lost its
+  north road, which 238 still offers.
+- **Follow-through bridges (373-374, 381-408):** a chase, a capture, a gunshot or a failed roll now gets a line on
+  screen before the story moves on. The random-run madness rate fell to about 1.5%, because the merged hinge
+  choice is offered once instead of twice. A reader who chases the dream still goes mad about half the time.
+
+Numbers after the playtest fixes: 408 sections, about 25,000 words, an average path of 34.2, 0 cosmetic decisions,
+about 8% death and 1.5% madness in random runs. By kind of reader, a careful one dies 0% of the time, a reckless one
+70%, and one who chases the dream goes mad 49%. All `targets:` were met, with `sections` raised to [380, 420].
+
 **2026-10-28: written to the author's brief, with these departures from story-craft.** All were settled in the
 `/new-story` interview, or in tuning afterwards. Leave them alone unless the author asks again.
 
