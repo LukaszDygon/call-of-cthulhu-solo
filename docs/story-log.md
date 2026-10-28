@@ -3,6 +3,53 @@
 Decisions about published stories that the checks or `docs/story-craft.md` would otherwise flag. Read the entry for
 a story before you "fix" one of these during `/verify-story` or a rework. Newest entries first.
 
+## A Very American Dream (`site/adventures/american-dream.yaml`)
+
+**2026-10-28: written to the author's brief, with these departures from story-craft.** All were settled in the
+`/new-story` interview, or in tuning afterwards. Leave them alone unless the author asks again.
+
+- **Solo (story-craft §7):** there are no companions. Bix, Owen, Agnes and Ruiz are journal words (BIX, OWEN, AGNES,
+  RUIZ, CRUISER, VAN), as in Innsmouth. There's no `companion_break` target.
+- **Length (§1):** the author asked for "about 300 screens" with an average play of 40. The approved map came to 305
+  sections. Drafting, a third Wednesday visit, the audit bridges and the death scenes took it to 372.
+- **Path target:** a playthrough that reaches a main ending averages about 40 sections. Random runs average about 34,
+  because they also take the quick endings and the three-strikes Spat Out endings. That's why `path_mean` is
+  [32, 42]. Don't pad the story to push the random mean up.
+- **The core rule is the author's:** going along with the weirdest thing raises Luck and costs a little Sanity.
+  Refusing a coincidence notes SNAG, then SNAG2, and a third refusal in one act ends the story (Bakersfield,
+  Barstow, Needles). The triple copies of each resist choice are deliberate.
+- **Madness and death come from choices, not dice (§7).** These are the author's rules. They superseded the first
+  draft, where madness was near zero and death came almost only from falls at the dish.
+  - *Madness* is embracing life in the dream "experientially forever". Choices that go deeper than the coincidences
+    ask cost fixed Sanity, not rolls:
+    - the punch, Sol's pool, conducting the Bowl and walking on the still sea: -8 each
+    - the tar vision and the headsets: -10
+    - a Daybreak tab: -15
+    - a tab or open arms at the hinge (346, 367): -30
+    A reader who chases the dream goes mad.
+  - *Death* comes from fighting overwhelming odds or stupid stunts:
+    - ramming the grey car (368): -6 HP
+    - fighting the Hollow men: -8 (369, which also notes LISTENERS) and -8 (370)
+    - rushing the guarded gate (371): -11
+    - going for Calloway's gun (372): -9
+    These kill a reader who is already hurt. The gate kills almost anyone. Every second refusal of the city in an act
+    also costs 1 HP. The dice-only falls and shocks at the dish were softened to 1D6.
+  - *Simulated by kind of reader:*
+    - careful, going along: 0% death, 1% madness, 10% triumph
+    - reckless: 65% death
+    - chasing the dream: 48% madness, 36% claimed
+    - random: about 9% death and 3% madness
+  - Death is above the guide's 2-5% because random readers take the suicidal options as often as any other. Don't
+    soften the fights to bring the random number down.
+- **Fake coincidences (Acts 3-4):** the author approved grey, silent fakes that lead into Helion's hands. The tell is
+  planted in Act 2 (GREY), and it warns at each fake.
+- **Three lines, no trunk:** the Current, the Straight World and Helion's Side. Revision 2 of the map was rebuilt on
+  them at the author's request, so that no scene after the opening is one every reader must see.
+
+Numbers at the time: 372 sections, about 23,900 words, an average of about 64 words of main text per screen, 157
+decisions (0 cosmetic), 25 endings (23 reached in random simulation), about 9% death and 3% madness in random runs.
+All `targets:` were met.
+
 ## The Last Bus from Innsmouth (`site/adventures/innsmouth.yaml`)
 
 **2026-10-10: short screens, at the author's request.** After playing it, the author found the text far too long,
